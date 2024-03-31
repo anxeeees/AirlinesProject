@@ -24,10 +24,11 @@ public class TicketBooking extends javax.swing.JFrame {
     /**
      * Creates new form Passenger2
      */
-   public TicketBooking() {
-    initComponents();
-    getPassenger();
-}
+    public TicketBooking() {
+        initComponents();
+        getPassenger();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,7 +72,7 @@ public class TicketBooking extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
         tb_nationality = new com.mycompany.airlinesproject.FTextField();
-        tb_passport1 = new com.mycompany.airlinesproject.FTextField();
+        tb_gender = new com.mycompany.airlinesproject.FTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -142,6 +143,11 @@ public class TicketBooking extends javax.swing.JFrame {
         jLabel10.setText("Flight code");
 
         tb_pass_id.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        tb_pass_id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tb_pass_idActionPerformed(evt);
+            }
+        });
 
         jPanel5.setBackground(new java.awt.Color(220, 219, 219));
 
@@ -344,7 +350,7 @@ public class TicketBooking extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(tb_passport1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -448,7 +454,7 @@ public class TicketBooking extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tb_passport1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -489,24 +495,43 @@ public class TicketBooking extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+
     Connection connection = null;
     PreparedStatement pst = null;
     ResultSet rs = null, results1 = null;
     Statement st = null, statement1 = null;
 
 
-
     private void getPassenger() {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
             st = connection.createStatement();
             String query = "select * from passengers";
             rs = st.executeQuery(query);
             while (rs.next()) {
                 String pass_id = String.valueOf(rs.getInt("pass_id"));
                 tb_pass_id.addItem(pass_id);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void getPassData() {
+        String query = "select * from passengers where pass_id="+tb_pass_id.getSelectedItem().toString();
+        Statement statement;
+        ResultSet resultSet;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+            statement =connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            if(resultSet.next()) {
+                tb_name.setText(resultSet.getString("name"));
+                tb_gender.setText(resultSet.getString("gender"));
+                tb_passport.setText(resultSet.getString("passport"));
+                tb_nationality.setText(resultSet.getString("nationality"));
+
             }
         }
         catch (Exception e) {
@@ -515,18 +540,7 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
-    int pass_id = 0;
-    private void countPassengers() {
-        try {
-            statement1 = connection.createStatement();
-            results1 = statement1.executeQuery("SELECT MAX(pass_id) FROM passengers");
-            results1.next();
-            pass_id = results1.getInt(1) +1;
 
-        } catch (Exception e) {
-
-        }
-    }
 
     private void clear() {
         tb_name.setText("");
@@ -605,10 +619,10 @@ public class TicketBooking extends javax.swing.JFrame {
         } 
         else {
             try {
-                countPassengers();
+
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
                 PreparedStatement add = connection.prepareStatement("Insert into passengers values (?,?,?,?,?,?,?)");
-                add.setInt(1,pass_id);
+               // add.setInt(1,pass_id);
                 add.setString(2,tb_name.getText());
                 add.setString(3,tb_flight_code.getSelectedItem().toString());
                 add.setString(4,tb_pass_id.getSelectedItem().toString());
@@ -635,6 +649,11 @@ public class TicketBooking extends javax.swing.JFrame {
     private void reset_buttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_reset_buttonMouseEntered
+
+    private void tb_pass_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tb_pass_idActionPerformed
+        // TODO add your handling code here:
+        getPassData();
+    }//GEN-LAST:event_tb_pass_idActionPerformed
 
     /**
      * @param args the command line arguments
@@ -694,11 +713,11 @@ public class TicketBooking extends javax.swing.JFrame {
     private com.mycompany.airlinesproject.RoundedButton reset_button;
     private com.mycompany.airlinesproject.FTextField tb_amount;
     private javax.swing.JComboBox<String> tb_flight_code;
+    private com.mycompany.airlinesproject.FTextField tb_gender;
     private com.mycompany.airlinesproject.FTextField tb_name;
     private com.mycompany.airlinesproject.FTextField tb_nationality;
     private javax.swing.JComboBox<String> tb_pass_id;
     private com.mycompany.airlinesproject.FTextField tb_passport;
-    private com.mycompany.airlinesproject.FTextField tb_passport1;
     // End of variables declaration//GEN-END:variables
 }
 

@@ -27,6 +27,10 @@ public class TicketBooking extends javax.swing.JFrame {
     public TicketBooking() {
         initComponents();
         getPassenger();
+        tb_nationality.setEditable(false);
+        tb_name.setEditable(false);
+        tb_passport.setEditable(false);
+        tb_gender.setEditable(false);
     }
 
     /**

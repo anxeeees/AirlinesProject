@@ -104,7 +104,7 @@
                           <EmptySpace min="-2" pref="399" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="book_button" min="-2" pref="115" max="-2" attributes="0"/>
+                                  <Component id="cancel_button" min="-2" pref="115" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                                   <Component id="reset_button" min="-2" pref="115" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
@@ -132,7 +132,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="back_button" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
                       <Component id="reset_button" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                      <Component id="book_button" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                      <Component id="cancel_button" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" pref="32" max="-2" attributes="0"/>
@@ -240,6 +240,9 @@
                     <Column editable="true" title="Title 3" type="java.lang.Object"/>
                     <Column editable="true" title="Title 4" type="java.lang.Object"/>
                   </Table>
+                </Property>
+                <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="66" green="66" red="66" type="rgb"/>
                 </Property>
               </Properties>
             </Component>
@@ -409,9 +412,9 @@
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Locale locale = new Locale(&quot;en&quot;, &quot;US&quot;);&#xa;can_flight_date.setLocale(locale);"/>
           </AuxValues>
         </Component>
-        <Component class="com.mycompany.airlinesproject.RoundedButton" name="book_button">
+        <Component class="com.mycompany.airlinesproject.RoundedButton" name="cancel_button">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Book"/>
+            <Property name="text" type="java.lang.String" value="Cancel"/>
             <Property name="fillOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="cc" red="cc" type="rgb"/>
             </Property>
@@ -420,8 +423,8 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="book_buttonMouseClicked"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="book_buttonActionPerformed"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cancel_buttonMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancel_buttonActionPerformed"/>
           </Events>
         </Component>
         <Component class="com.mycompany.airlinesproject.RoundedButton" name="reset_button">

@@ -6,8 +6,7 @@ package com.mycompany.airlinesproject;
 
 import java.sql.*;
 import java.util.Locale;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,6 +21,7 @@ public class Cancellation extends javax.swing.JFrame {
     public Cancellation() {
         initComponents();
         getTicket();
+        can_flight_code.setEditable(false);
     }
 
     /**
@@ -52,7 +52,7 @@ public class Cancellation extends javax.swing.JFrame {
         can_flight_code = new com.mycompany.airlinesproject.FTextField();
         can_ticket_id = new javax.swing.JComboBox<>();
         can_flight_date = new com.toedter.calendar.JDateChooser();
-        book_button = new com.mycompany.airlinesproject.RoundedButton();
+        cancel_button = new com.mycompany.airlinesproject.RoundedButton();
         reset_button = new com.mycompany.airlinesproject.RoundedButton();
         back_button = new com.mycompany.airlinesproject.RoundedButton();
 
@@ -96,6 +96,7 @@ public class Cancellation extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        cancellation_table.setSelectionBackground(new java.awt.Color(102, 102, 102));
         jScrollPane1.setViewportView(cancellation_table);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -191,17 +192,17 @@ public class Cancellation extends javax.swing.JFrame {
             }
         });
 
-        book_button.setText("Book");
-        book_button.setFillOver(new java.awt.Color(204, 204, 204));
-        book_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        book_button.addMouseListener(new java.awt.event.MouseAdapter() {
+        cancel_button.setText("Cancel");
+        cancel_button.setFillOver(new java.awt.Color(204, 204, 204));
+        cancel_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        cancel_button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                book_buttonMouseClicked(evt);
+                cancel_buttonMouseClicked(evt);
             }
         });
-        book_button.addActionListener(new java.awt.event.ActionListener() {
+        cancel_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                book_buttonActionPerformed(evt);
+                cancel_buttonActionPerformed(evt);
             }
         });
 
@@ -282,7 +283,7 @@ public class Cancellation extends javax.swing.JFrame {
                         .addGap(399, 399, 399)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(book_button, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cancel_button, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(45, 45, 45)
                                 .addComponent(reset_button, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
@@ -304,7 +305,7 @@ public class Cancellation extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(back_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(reset_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(book_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancel_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -357,15 +358,38 @@ public class Cancellation extends javax.swing.JFrame {
         getFlightCode();
     }//GEN-LAST:event_can_ticket_idActionPerformed
 
-    private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_book_buttonMouseClicked
+    private void cancel_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancel_buttonMouseClicked
         // TODO add your handling code here:
+        if(can_flight_code.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Missing information");
+        }
+        else {
+            try {
+                countCancellation();
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+                PreparedStatement add = connection.prepareStatement("Insert into cancellation values (?,?,?,?)");
+                add.setInt(1,cancel_id);
+                add.setInt(2,Integer.valueOf(can_ticket_id.getSelectedItem().toString()));
+                add.setString(3,can_flight_code.getText());
+                add.setString(4,can_flight_date.getDate().toString());
+                int row = add.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Ticket cancelled");
+                connection.close();
+                displayCan();
+               // clear();
+
+            }
+            catch(Exception e) {
+                JOptionPane.showMessageDialog(this, e);
+            }
+        }
 
 
-    }//GEN-LAST:event_book_buttonMouseClicked
+    }//GEN-LAST:event_cancel_buttonMouseClicked
 
-    private void book_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_book_buttonActionPerformed
+    private void cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_buttonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_book_buttonActionPerformed
+    }//GEN-LAST:event_cancel_buttonActionPerformed
 
     private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseClicked
         can_flight_code.setText("");
@@ -394,7 +418,7 @@ public class Cancellation extends javax.swing.JFrame {
     Statement st = null, statement1 = null;
 
 
-    private void displayBooking() {
+    private void displayCan() {
         try {
             // Establish connection to the database
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
@@ -435,14 +459,14 @@ public class Cancellation extends javax.swing.JFrame {
         }
     }
 
-    int ticket_id = 0;
-    private void countFlights() {
+    int cancel_id = 0;
+    private void countCancellation() {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
             statement1 = connection.createStatement();
-            results1 = statement1.executeQuery("SELECT MAX(ticket_id) FROM booking");
+            results1 = statement1.executeQuery("SELECT MAX(canc_id) FROM cancellation");
             results1.next();
-            ticket_id = results1.getInt(1) + 1;
+            cancel_id  = results1.getInt(1) + 1;
             connection.close(); // Close connection after retrieving the ticket_id
         } catch (Exception e) {
             e.printStackTrace(); // Add error handling
@@ -511,10 +535,10 @@ public class Cancellation extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.mycompany.airlinesproject.RoundedButton back_button;
-    private com.mycompany.airlinesproject.RoundedButton book_button;
     private com.mycompany.airlinesproject.FTextField can_flight_code;
     private com.toedter.calendar.JDateChooser can_flight_date;
     private javax.swing.JComboBox<String> can_ticket_id;
+    private com.mycompany.airlinesproject.RoundedButton cancel_button;
     private javax.swing.JTable cancellation_table;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

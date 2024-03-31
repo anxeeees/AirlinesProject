@@ -22,6 +22,7 @@ public class Cancellation extends javax.swing.JFrame {
         initComponents();
         getTicket();
         can_flight_code.setEditable(false);
+        displayCan();
     }
 
     /**
@@ -375,7 +376,9 @@ public class Cancellation extends javax.swing.JFrame {
                 int row = add.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Ticket cancelled");
                 connection.close();
+                cancel();
                 displayCan();
+                getTicket();
                // clear();
 
             }
@@ -386,6 +389,20 @@ public class Cancellation extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_cancel_buttonMouseClicked
+
+    private void cancel() {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+            String query = "Delete from booking where ticket_id="+can_ticket_id.getSelectedItem();
+            Statement del = connection.createStatement();
+            del.executeUpdate(query);
+           //JOptionPane.showMessageDialog(this, "Flight deleted");
+            //displayFlight();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e);
+        }
+    }
+
 
     private void cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_buttonActionPerformed
         // TODO add your handling code here:

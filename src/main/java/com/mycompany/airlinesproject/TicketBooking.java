@@ -27,6 +27,7 @@ public class TicketBooking extends javax.swing.JFrame {
         initComponents();
         getPassenger();
         getFlight();
+        displayBooking();
         tb_nationality.setEditable(false);
         tb_name.setEditable(false);
         tb_passport.setEditable(false);
@@ -53,7 +54,7 @@ public class TicketBooking extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        pass_table = new javax.swing.JTable();
+        booking_table = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         tb_pass_id = new javax.swing.JComboBox<>();
@@ -116,7 +117,7 @@ public class TicketBooking extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel9.setText("SkyWing Airlines");
 
-        pass_table.setModel(new javax.swing.table.DefaultTableModel(
+        booking_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -131,14 +132,14 @@ public class TicketBooking extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        pass_table.setRowHeight(25);
-        pass_table.setSelectionBackground(new java.awt.Color(102, 102, 102));
-        pass_table.addMouseListener(new java.awt.event.MouseAdapter() {
+        booking_table.setRowHeight(25);
+        booking_table.setSelectionBackground(new java.awt.Color(102, 102, 102));
+        booking_table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-
+                //booking_tableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(pass_table);
+        jScrollPane1.setViewportView(booking_table);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel11.setText("Passenger id");
@@ -587,30 +588,87 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_amount.setText("");
     }//GEN-LAST:event_reset_buttonMouseClicked
 
+    private void displayBooking() {
+        try {
+            // Establish connection to the database
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+
+            // Create a statement
+            st = connection.createStatement();
+
+            // Execute the query to retrieve data from the 'passengers' table
+            rs = st.executeQuery("SELECT * FROM booking");
+
+            // Get the metadata of the ResultSet
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            // Get the number of columns
+            int columnCount = metaData.getColumnCount();
+
+            // Create a DefaultTableModel to hold the data
+            DefaultTableModel model = new DefaultTableModel();
+
+            // Add column names to the model
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                model.addColumn(metaData.getColumnName(columnIndex));
+            }
+
+            // Add rows to the model
+            while (rs.next()) {
+                Object[] rowData = new Object[columnCount];
+                for (int i = 0; i < columnCount; i++) {
+                    rowData[i] = rs.getObject(i + 1);
+                }
+                model.addRow(rowData);
+            }
+
+            // Set the model to the JTable
+            booking_table.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace(); // Print any exceptions for debugging purposes
+        }
+    }
+
+    int ticket_id = 0;
+    private void countFlights() {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+            statement1 = connection.createStatement();
+            results1 = statement1.executeQuery("SELECT MAX(ticket_id) FROM booking");
+            results1.next();
+            ticket_id = results1.getInt(1) + 1;
+            connection.close(); // Close connection after retrieving the ticket_id
+        } catch (Exception e) {
+            e.printStackTrace(); // Add error handling
+        }
+    }
 
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_book_buttonMouseClicked
         // TODO add your handling code here:
-        if (tb_name.getText().isEmpty() || tb_amount.getText().isEmpty()
-                || tb_passport.getText().isEmpty()) {
+        if(tb_pass_id.getSelectedIndex() == -1 ||tb_flight_code.getSelectedIndex() == -1
+                || tb_amount.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
-        } else {
+        }
+        else {
             try {
-
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                PreparedStatement add = connection.prepareStatement("Insert into passengers values (?,?,?,?,?,?,?)");
-                // add.setInt(1,pass_id);
-                add.setString(2, tb_name.getText());
-                add.setString(3, tb_flight_code.getSelectedItem().toString());
-                add.setString(4, tb_pass_id.getSelectedItem().toString());
-                add.setString(5, tb_amount.getText());
-                add.setString(6, tb_passport.getText());
-                // add.setString(7,pass_phone.getText());
+                countFlights();
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+                PreparedStatement add = connection.prepareStatement("Insert into booking values (?,?,?,?,?,?,?)");
+                add.setInt(1,ticket_id);
+                add.setString(2,tb_name.getText());
+                add.setString(3,tb_flight_code.getSelectedItem().toString());
+                add.setString(4,tb_gender.getText());
+                add.setString(5,tb_passport.getText());
+                add.setInt(6,Integer.valueOf(tb_amount.getText()));
+                add.setString(7,tb_nationality.getText());
                 int row = add.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Passenger added");
+                JOptionPane.showMessageDialog(this, "Ticket added");
                 connection.close();
+                displayBooking();
+              //  clear();
 
-
-            } catch (Exception e) {
+            }
+            catch(Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
         }
@@ -667,6 +725,7 @@ public class TicketBooking extends javax.swing.JFrame {
     private com.mycompany.airlinesproject.AirlinesProject airlinesProject1;
     private com.mycompany.airlinesproject.RoundedButton back_button;
     private com.mycompany.airlinesproject.RoundedButton book_button;
+    private javax.swing.JTable booking_table;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -690,7 +749,6 @@ public class TicketBooking extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable pass_table;
     private com.mycompany.airlinesproject.RoundedButton reset_button;
     private com.mycompany.airlinesproject.FTextField tb_amount;
     private javax.swing.JComboBox<String> tb_flight_code;

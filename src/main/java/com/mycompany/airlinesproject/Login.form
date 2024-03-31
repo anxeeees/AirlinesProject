@@ -61,9 +61,9 @@
                           </Group>
                           <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fTextField2" min="-2" pref="209" max="-2" attributes="0"/>
-                              <Component id="fTextField1" min="-2" pref="209" max="-2" attributes="0"/>
-                              <Component id="roundedButton1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="username" pref="209" max="32767" attributes="0"/>
+                              <Component id="login_button" alignment="0" max="32767" attributes="0"/>
+                              <Component id="password" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="177" max="-2" attributes="0"/>
                       </Group>
@@ -105,16 +105,21 @@
                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="fTextField1" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="username" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel4" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="fTextField2" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="jLabel4" min="-2" pref="32" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="password" min="-2" pref="35" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="roundedButton1" min="-2" pref="40" max="-2" attributes="0"/>
-                  <EmptySpace pref="37" max="32767" attributes="0"/>
+                  <Component id="login_button" min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -230,11 +235,9 @@
             <Property name="text" type="java.lang.String" value="_____________________"/>
           </Properties>
         </Component>
-        <Component class="com.mycompany.airlinesproject.FTextField" name="fTextField1">
+        <Component class="com.mycompany.airlinesproject.FTextField" name="username">
         </Component>
-        <Component class="com.mycompany.airlinesproject.FTextField" name="fTextField2">
-        </Component>
-        <Component class="com.mycompany.airlinesproject.RoundedButton" name="roundedButton1">
+        <Component class="com.mycompany.airlinesproject.RoundedButton" name="login_button">
           <Properties>
             <Property name="text" type="java.lang.String" value="Log-in"/>
             <Property name="fillOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -244,6 +247,11 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="login_buttonMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="com.mycompany.airlinesproject.PasswordField" name="password">
         </Component>
       </SubComponents>
     </Container>

@@ -31,10 +31,10 @@ public class MainForm extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        back_button1 = new com.mycompany.airlinesproject.RoundedButton();
-        back_button2 = new com.mycompany.airlinesproject.RoundedButton();
-        back_button4 = new com.mycompany.airlinesproject.RoundedButton();
-        back_button5 = new com.mycompany.airlinesproject.RoundedButton();
+        tickets_button = new com.mycompany.airlinesproject.RoundedButton();
+        canc_button = new com.mycompany.airlinesproject.RoundedButton();
+        flights_button = new com.mycompany.airlinesproject.RoundedButton();
+        pass_button = new com.mycompany.airlinesproject.RoundedButton();
 
         back_button3.setText("Cancellation");
         back_button3.setFillOver(new java.awt.Color(204, 204, 204));
@@ -86,39 +86,39 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        back_button1.setText("Tickets");
-        back_button1.setFillOver(new java.awt.Color(204, 204, 204));
-        back_button1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        back_button1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tickets_button.setText("Tickets");
+        tickets_button.setFillOver(new java.awt.Color(204, 204, 204));
+        tickets_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tickets_button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                back_button1MouseClicked(evt);
+                tickets_buttonMouseClicked(evt);
             }
         });
 
-        back_button2.setText("Cancellation");
-        back_button2.setFillOver(new java.awt.Color(204, 204, 204));
-        back_button2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        back_button2.addMouseListener(new java.awt.event.MouseAdapter() {
+        canc_button.setText("Cancellation");
+        canc_button.setFillOver(new java.awt.Color(204, 204, 204));
+        canc_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        canc_button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                back_button2MouseClicked(evt);
+                canc_buttonMouseClicked(evt);
             }
         });
 
-        back_button4.setText("Flights");
-        back_button4.setFillOver(new java.awt.Color(204, 204, 204));
-        back_button4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        back_button4.addMouseListener(new java.awt.event.MouseAdapter() {
+        flights_button.setText("Flights");
+        flights_button.setFillOver(new java.awt.Color(204, 204, 204));
+        flights_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        flights_button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                back_button4MouseClicked(evt);
+                flights_buttonMouseClicked(evt);
             }
         });
 
-        back_button5.setText("Passengers");
-        back_button5.setFillOver(new java.awt.Color(204, 204, 204));
-        back_button5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        back_button5.addMouseListener(new java.awt.event.MouseAdapter() {
+        pass_button.setText("Passengers");
+        pass_button.setFillOver(new java.awt.Color(204, 204, 204));
+        pass_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        pass_button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                back_button5MouseClicked(evt);
+                pass_buttonMouseClicked(evt);
             }
         });
 
@@ -129,12 +129,12 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(205, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(back_button5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(back_button4, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pass_button, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(flights_button, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(64, 64, 64)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(back_button2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(back_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(canc_button, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tickets_button, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(186, 186, 186))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -144,12 +144,12 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(134, 134, 134)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(back_button2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(back_button4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(canc_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(flights_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(back_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(back_button5, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tickets_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pass_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(91, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -171,7 +171,7 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void back_button1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_button1MouseClicked
+    private void tickets_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tickets_buttonMouseClicked
 
         // TODO add your handling code here:
         new TicketBooking().setVisible(true);
@@ -179,29 +179,29 @@ public class MainForm extends javax.swing.JFrame {
         
         
 
-    }//GEN-LAST:event_back_button1MouseClicked
+    }//GEN-LAST:event_tickets_buttonMouseClicked
 
-    private void back_button2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_button2MouseClicked
+    private void canc_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canc_buttonMouseClicked
         // TODO add your handling code here:
         new Cancellation().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_back_button2MouseClicked
+    }//GEN-LAST:event_canc_buttonMouseClicked
 
     private void back_button3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_button3MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_back_button3MouseClicked
 
-    private void back_button4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_button4MouseClicked
+    private void flights_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flights_buttonMouseClicked
         // TODO add your handling code here:
         new Flights().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_back_button4MouseClicked
+    }//GEN-LAST:event_flights_buttonMouseClicked
 
-    private void back_button5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_button5MouseClicked
+    private void pass_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pass_buttonMouseClicked
         // TODO add your handling code here:
         new Passenger().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_back_button5MouseClicked
+    }//GEN-LAST:event_pass_buttonMouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         // TODO add your handling code here:
@@ -244,14 +244,14 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.airlinesproject.RoundedButton back_button1;
-    private com.mycompany.airlinesproject.RoundedButton back_button2;
     private com.mycompany.airlinesproject.RoundedButton back_button3;
-    private com.mycompany.airlinesproject.RoundedButton back_button4;
-    private com.mycompany.airlinesproject.RoundedButton back_button5;
+    private com.mycompany.airlinesproject.RoundedButton canc_button;
+    private com.mycompany.airlinesproject.RoundedButton flights_button;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private com.mycompany.airlinesproject.RoundedButton pass_button;
+    private com.mycompany.airlinesproject.RoundedButton tickets_button;
     // End of variables declaration//GEN-END:variables
 }

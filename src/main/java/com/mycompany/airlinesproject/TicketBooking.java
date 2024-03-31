@@ -26,7 +26,7 @@ public class TicketBooking extends javax.swing.JFrame {
      */
    public TicketBooking() {
     initComponents();
-      displayPassengers();
+    getPassenger();
 }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,8 +70,8 @@ public class TicketBooking extends javax.swing.JFrame {
         book_button = new com.mycompany.airlinesproject.RoundedButton();
         jLabel5 = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
-        tb_gender = new javax.swing.JComboBox<>();
         tb_nationality = new com.mycompany.airlinesproject.FTextField();
+        tb_passport1 = new com.mycompany.airlinesproject.FTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -319,8 +319,6 @@ public class TicketBooking extends javax.swing.JFrame {
             .addGap(0, 13, Short.MAX_VALUE)
         );
 
-        tb_gender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -346,7 +344,7 @@ public class TicketBooking extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(tb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tb_passport1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -422,31 +420,35 @@ public class TicketBooking extends javax.swing.JFrame {
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(tb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(tb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tb_pass_id, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tb_pass_id, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tb_flight_code, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tb_flight_code, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tb_passport1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -461,16 +463,13 @@ public class TicketBooking extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(tb_amount, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tb_nationality, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(120, Short.MAX_VALUE))
         );
 
@@ -497,46 +496,24 @@ public class TicketBooking extends javax.swing.JFrame {
     ResultSet rs = null, results1 = null;
     Statement st = null, statement1 = null;
 
-    private void displayPassengers() {
+
+
+    private void getPassenger() {
         try {
-            // Establish connection to the database
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
-
-            // Create a statement
             st = connection.createStatement();
-
-            // Execute the query to retrieve data from the 'passengers' table
-            rs = st.executeQuery("SELECT * FROM passengers");
-
-            // Get the metadata of the ResultSet
-            ResultSetMetaData metaData = rs.getMetaData();
-
-            // Get the number of columns
-            int columnCount = metaData.getColumnCount();
-
-            // Create a DefaultTableModel to hold the data
-            DefaultTableModel model = new DefaultTableModel();
-
-            // Add column names to the model
-            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                model.addColumn(metaData.getColumnName(columnIndex));
-            }
-
-            // Add rows to the model
+            String query = "select * from passengers";
+            rs = st.executeQuery(query);
             while (rs.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = rs.getObject(i + 1);
-                }
-                model.addRow(rowData);
+                String pass_id = String.valueOf(rs.getInt("pass_id"));
+                tb_pass_id.addItem(pass_id);
             }
+        }
+        catch (Exception e) {
 
-            // Set the model to the JTable
-            pass_table.setModel(model);
-        } catch (Exception e) {
-            e.printStackTrace(); // Print any exceptions for debugging purposes
         }
     }
+
 
     int pass_id = 0;
     private void countPassengers() {
@@ -555,7 +532,7 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_name.setText("");
         tb_amount.setText("");
         tb_passport.setText("");
-        pass_phone.setText("");
+       // pass_phone.setText("");
     }
 
 
@@ -570,7 +547,7 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_pass_id.setSelectedItem(model.getValueAt(myIndex,3).toString());
         tb_amount.setText(model.getValueAt(myIndex,4).toString());
         tb_passport.setText(model.getValueAt(myIndex,5).toString());
-        pass_phone.setText(model.getValueAt(myIndex,6).toString());
+       // pass_phone.setText(model.getValueAt(myIndex,6).toString());
 
     }//GEN-LAST:event_pass_tableMouseClicked
 
@@ -604,11 +581,11 @@ public class TicketBooking extends javax.swing.JFrame {
                 add.setString(3,tb_pass_id.getSelectedItem().toString());
                 add.setString(4,tb_amount.getText());
                 add.setString(5,tb_passport.getText());
-                add.setString(6 ,pass_phone.getText());
+               // add.setString(6 ,pass_phone.getText());
                 int row = add.executeUpdate();
                  JOptionPane.showMessageDialog(this, "Passenger updated");
                  connection.close();
-                  displayPassengers();
+                 // displayPassengers();
                   clear();
                 
             }
@@ -618,10 +595,12 @@ public class TicketBooking extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_reset_buttonMouseClicked
 
+
+
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_book_buttonMouseClicked
           // TODO add your handling code here:
         if(tb_name.getText().isEmpty() || tb_amount.getText().isEmpty()
-                || tb_passport.getText().isEmpty() || pass_phone.getText().isEmpty()) {
+                || tb_passport.getText().isEmpty() ) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } 
         else {
@@ -635,11 +614,11 @@ public class TicketBooking extends javax.swing.JFrame {
                 add.setString(4,tb_pass_id.getSelectedItem().toString());
                 add.setString(5,tb_amount.getText());
                 add.setString(6,tb_passport.getText());
-                add.setString(7,pass_phone.getText());
+               // add.setString(7,pass_phone.getText());
                 int row = add.executeUpdate();
                  JOptionPane.showMessageDialog(this, "Passenger added");
                  connection.close();
-                  displayPassengers();
+                  //displayPassengers();
                   clear();
                 
             }
@@ -715,11 +694,11 @@ public class TicketBooking extends javax.swing.JFrame {
     private com.mycompany.airlinesproject.RoundedButton reset_button;
     private com.mycompany.airlinesproject.FTextField tb_amount;
     private javax.swing.JComboBox<String> tb_flight_code;
-    private javax.swing.JComboBox<String> tb_gender;
     private com.mycompany.airlinesproject.FTextField tb_name;
     private com.mycompany.airlinesproject.FTextField tb_nationality;
     private javax.swing.JComboBox<String> tb_pass_id;
     private com.mycompany.airlinesproject.FTextField tb_passport;
+    private com.mycompany.airlinesproject.FTextField tb_passport1;
     // End of variables declaration//GEN-END:variables
 }
 

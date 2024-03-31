@@ -147,7 +147,6 @@ public class TicketBooking extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel10.setText("Flight code");
 
-        tb_pass_id.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         tb_pass_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tb_pass_idActionPerformed(evt);
@@ -276,8 +275,6 @@ public class TicketBooking extends javax.swing.JFrame {
                 tb_nameActionPerformed(evt);
             }
         });
-
-        tb_flight_code.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         back_button.setText("Back");
         back_button.setFillOver(new java.awt.Color(204, 204, 204));
@@ -528,7 +525,7 @@ public class TicketBooking extends javax.swing.JFrame {
             String query = "select * from flight";
             rs = st.executeQuery(query);
             while (rs.next()) {
-                String flight_code = String.valueOf(rs.getInt("code"));
+                String flight_code = rs.getString("code");
                 tb_flight_code.addItem(flight_code);
             }
         } catch (Exception e) {

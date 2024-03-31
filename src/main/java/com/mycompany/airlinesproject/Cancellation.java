@@ -4,9 +4,11 @@
  */
 package com.mycompany.airlinesproject;
 
+import java.sql.*;
 import java.util.Locale;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +21,7 @@ public class Cancellation extends javax.swing.JFrame {
      */
     public Cancellation() {
         initComponents();
+        getTicket();
     }
 
     /**
@@ -37,10 +40,7 @@ public class Cancellation extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        roundedButton2 = new com.mycompany.airlinesproject.RoundedButton();
-        roundedButton3 = new com.mycompany.airlinesproject.RoundedButton();
-        roundedButton5 = new com.mycompany.airlinesproject.RoundedButton();
+        cancellation_table = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -49,10 +49,12 @@ public class Cancellation extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
-        fTextField6 = new com.mycompany.airlinesproject.FTextField();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        roundedButton4 = new com.mycompany.airlinesproject.RoundedButton();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        can_flight_code = new com.mycompany.airlinesproject.FTextField();
+        can_ticket_id = new javax.swing.JComboBox<>();
+        can_flight_date = new com.toedter.calendar.JDateChooser();
+        book_button = new com.mycompany.airlinesproject.RoundedButton();
+        reset_button = new com.mycompany.airlinesproject.RoundedButton();
+        back_button = new com.mycompany.airlinesproject.RoundedButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,7 +85,7 @@ public class Cancellation extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel9.setText("SkyWing Airlines");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        cancellation_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -94,28 +96,13 @@ public class Cancellation extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-
-        roundedButton2.setText("Delete");
-        roundedButton2.setFillClick(new java.awt.Color(204, 204, 204));
-        roundedButton2.setFillOver(new java.awt.Color(0, 0, 0));
-        roundedButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-
-        roundedButton3.setText("Edit");
-        roundedButton3.setFillClick(javax.swing.UIManager.getDefaults().getColor("Button.disabledBorderColor"));
-        roundedButton3.setFillOver(new java.awt.Color(0, 0, 0));
-        roundedButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-
-        roundedButton5.setText("Back");
-        roundedButton5.setFillClick(new java.awt.Color(204, 204, 204));
-        roundedButton5.setFillOver(new java.awt.Color(0, 0, 0));
-        roundedButton5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jScrollPane1.setViewportView(cancellation_table);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel11.setText("Ticket id");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel10.setText("Flight code");
+        jLabel10.setText("Flight date");
 
         jPanel7.setBackground(new java.awt.Color(220, 219, 219));
 
@@ -195,22 +182,52 @@ public class Cancellation extends javax.swing.JFrame {
             .addGap(0, 8, Short.MAX_VALUE)
         );
 
-        fTextField6.setText("fTextField1");
+        can_flight_code.setText("fTextField1");
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox5.addActionListener(new java.awt.event.ActionListener() {
+        can_ticket_id.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        can_ticket_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox5ActionPerformed(evt);
+                can_ticket_idActionPerformed(evt);
             }
         });
 
-        roundedButton4.setText("Save");
-        roundedButton4.setFillClick(javax.swing.UIManager.getDefaults().getColor("Button.disabledBorderColor"));
-        roundedButton4.setFillOver(new java.awt.Color(0, 0, 0));
-        roundedButton4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        roundedButton4.addActionListener(new java.awt.event.ActionListener() {
+        book_button.setText("Book");
+        book_button.setFillOver(new java.awt.Color(204, 204, 204));
+        book_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        book_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                book_buttonMouseClicked(evt);
+            }
+        });
+        book_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                roundedButton4ActionPerformed(evt);
+                book_buttonActionPerformed(evt);
+            }
+        });
+
+        reset_button.setText("Reset");
+        reset_button.setFillOver(new java.awt.Color(204, 204, 204));
+        reset_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        reset_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reset_buttonMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                reset_buttonMouseEntered(evt);
+            }
+        });
+        reset_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reset_buttonActionPerformed(evt);
+            }
+        });
+
+        back_button.setText("Back");
+        back_button.setFillOver(new java.awt.Color(204, 204, 204));
+        back_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        back_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                back_buttonMouseClicked(evt);
             }
         });
 
@@ -219,24 +236,6 @@ public class Cancellation extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(366, 366, 366)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(roundedButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(roundedButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(roundedButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(roundedButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(399, 399, 399)
-                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(34, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,18 +250,18 @@ public class Cancellation extends javax.swing.JFrame {
                                             .addGroup(jPanel5Layout.createSequentialGroup()
                                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(fTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(can_flight_code, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addGroup(jPanel5Layout.createSequentialGroup()
                                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(can_flight_date, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGap(126, 126, 126))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(can_ticket_id, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(124, 124, 124)))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -274,6 +273,22 @@ public class Cancellation extends javax.swing.JFrame {
                 .addGap(510, 510, 510)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(499, 499, 499)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(399, 399, 399)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(book_button, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
+                                .addComponent(reset_button, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(back_button, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(430, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,13 +300,12 @@ public class Cancellation extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(roundedButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(roundedButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(roundedButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(roundedButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(back_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reset_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(book_button, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -302,19 +316,19 @@ public class Cancellation extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(can_ticket_id, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(can_flight_code, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(can_flight_date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -322,7 +336,7 @@ public class Cancellation extends javax.swing.JFrame {
         );
 
         Locale locale = new Locale("en", "US");
-        jDateChooser1.setLocale(locale);
+        can_flight_date.setLocale(locale);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -338,13 +352,135 @@ public class Cancellation extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void roundedButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundedButton4ActionPerformed
+    private void can_ticket_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_can_ticket_idActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_roundedButton4ActionPerformed
+        getFlightCode();
+    }//GEN-LAST:event_can_ticket_idActionPerformed
 
-    private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
+    private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_book_buttonMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox5ActionPerformed
+
+
+    }//GEN-LAST:event_book_buttonMouseClicked
+
+    private void book_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_book_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_book_buttonActionPerformed
+
+    private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseClicked
+        can_flight_code.setText("");
+
+    }//GEN-LAST:event_reset_buttonMouseClicked
+
+    private void reset_buttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reset_buttonMouseEntered
+
+    private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_buttonActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_reset_buttonActionPerformed
+
+    private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_buttonMouseClicked
+
+        // TODO add your handling code here:
+        new MainForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_back_buttonMouseClicked
+
+    Connection connection = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null, results1 = null;
+    Statement st = null, statement1 = null;
+
+
+    private void displayBooking() {
+        try {
+            // Establish connection to the database
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+
+            // Create a statement
+            st = connection.createStatement();
+
+            // Execute the query to retrieve data from the 'passengers' table
+            rs = st.executeQuery("SELECT * FROM cancellation");
+
+            // Get the metadata of the ResultSet
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            // Get the number of columns
+            int columnCount = metaData.getColumnCount();
+
+            // Create a DefaultTableModel to hold the data
+            DefaultTableModel model = new DefaultTableModel();
+
+            // Add column names to the model
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                model.addColumn(metaData.getColumnName(columnIndex));
+            }
+
+            // Add rows to the model
+            while (rs.next()) {
+                Object[] rowData = new Object[columnCount];
+                for (int i = 0; i < columnCount; i++) {
+                    rowData[i] = rs.getObject(i + 1);
+                }
+                model.addRow(rowData);
+            }
+
+            // Set the model to the JTable
+            cancellation_table.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace(); // Print any exceptions for debugging purposes
+        }
+    }
+
+    int ticket_id = 0;
+    private void countFlights() {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+            statement1 = connection.createStatement();
+            results1 = statement1.executeQuery("SELECT MAX(ticket_id) FROM booking");
+            results1.next();
+            ticket_id = results1.getInt(1) + 1;
+            connection.close(); // Close connection after retrieving the ticket_id
+        } catch (Exception e) {
+            e.printStackTrace(); // Add error handling
+        }
+    }
+    private void getTicket() {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+            st = connection.createStatement();
+            String query = "select * from booking";
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                int ticket = rs.getInt("ticket_id");
+                can_ticket_id.addItem(String.valueOf(ticket));
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void getFlightCode() {
+        String query = "select * from booking where ticket_id=" + can_ticket_id.getSelectedItem().toString();
+        Statement statement;
+        ResultSet resultSet;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                can_flight_code.setText(resultSet.getString("code"));
+
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
 
     /**
      * @param args the command line arguments
@@ -374,32 +510,27 @@ public class Cancellation extends javax.swing.JFrame {
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.airlinesproject.FTextField fTextField6;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.mycompany.airlinesproject.RoundedButton back_button;
+    private com.mycompany.airlinesproject.RoundedButton book_button;
+    private com.mycompany.airlinesproject.FTextField can_flight_code;
+    private com.toedter.calendar.JDateChooser can_flight_date;
+    private javax.swing.JComboBox<String> can_ticket_id;
+    private javax.swing.JTable cancellation_table;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private com.mycompany.airlinesproject.RoundedButton roundedButton2;
-    private com.mycompany.airlinesproject.RoundedButton roundedButton3;
-    private com.mycompany.airlinesproject.RoundedButton roundedButton4;
-    private com.mycompany.airlinesproject.RoundedButton roundedButton5;
+    private com.mycompany.airlinesproject.RoundedButton reset_button;
     // End of variables declaration//GEN-END:variables
 }

@@ -27,6 +27,7 @@ public class TicketBooking extends javax.swing.JFrame {
     public TicketBooking() {
         initComponents();
         getPassenger();
+        getFlight();
         tb_nationality.setEditable(false);
         tb_name.setEditable(false);
         tb_passport.setEditable(false);
@@ -515,6 +516,20 @@ public class TicketBooking extends javax.swing.JFrame {
             while (rs.next()) {
                 String pass_id = String.valueOf(rs.getInt("pass_id"));
                 tb_pass_id.addItem(pass_id);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+    private void getFlight() {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+            st = connection.createStatement();
+            String query = "select * from flight";
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                String flight_code = String.valueOf(rs.getInt("code"));
+                tb_flight_code.addItem(flight_code);
             }
         } catch (Exception e) {
 

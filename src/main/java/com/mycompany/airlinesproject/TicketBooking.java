@@ -579,13 +579,7 @@ public class TicketBooking extends javax.swing.JFrame {
     }//GEN-LAST:event_back_buttonMouseClicked
 
     private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseClicked
-        tb_flight_code.setSelectedIndex(-1);
-        tb_pass_id.setSelectedIndex(-1);
-        tb_name.setText("");
-        tb_passport.setText("");
-        tb_gender.setText("");
-        tb_nationality.setText("");
-        tb_amount.setText("");
+       clear();
     }//GEN-LAST:event_reset_buttonMouseClicked
 
     private void displayBooking() {
@@ -643,6 +637,16 @@ public class TicketBooking extends javax.swing.JFrame {
         }
     }
 
+    private void clear() {
+        tb_flight_code.setSelectedIndex(-1);
+        //tb_pass_id.setSelectedIndex(-1);
+        tb_name.setText("");
+        tb_passport.setText("");
+        tb_gender.setText("");
+        tb_nationality.setText("");
+        tb_amount.setText("");
+    }
+
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_book_buttonMouseClicked
         // TODO add your handling code here:
         if(tb_pass_id.getSelectedIndex() == -1 ||tb_flight_code.getSelectedIndex() == -1
@@ -665,7 +669,7 @@ public class TicketBooking extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Ticket added");
                 connection.close();
                 displayBooking();
-              //  clear();
+                clear();
 
             }
             catch(Exception e) {

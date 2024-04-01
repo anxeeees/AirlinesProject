@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.mycompany.airlinesproject;
 
 import java.sql.*;
@@ -421,7 +418,6 @@ public class Flights extends javax.swing.JFrame {
     }
 
     private void delete_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
         if (key == "") {
             JOptionPane.showMessageDialog(this, "select a flight");
         } else {
@@ -444,7 +440,6 @@ public class Flights extends javax.swing.JFrame {
         } 
         else {
             try {
-                //countPassengers();
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
                 String query = "update flight set source=?,destination=?,date=?, seats=?" +
                         "where code=?";

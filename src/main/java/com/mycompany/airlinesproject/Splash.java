@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.airlinesproject;
+
+import javax.swing.*;
+
 /**
  *
  * @author Ester
@@ -82,7 +85,6 @@ public class Splash extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
          new MainForm().setVisible(true);
         this.dispose();
     }
@@ -91,7 +93,10 @@ public class Splash extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+        }
         java.awt.EventQueue.invokeLater(() -> new Splash().setVisible(true));
     }
 

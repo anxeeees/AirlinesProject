@@ -1,6 +1,8 @@
 
 package com.mycompany.airlinesproject;
 
+import javax.swing.*;
+
 /**
  *
  * @author Ester
@@ -205,11 +207,12 @@ public class MainForm extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainForm().setVisible(true);
-            }
-        });
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+        }
+        java.awt.EventQueue.invokeLater(() -> new MainForm().setVisible(true));
+
     }
 
     private com.mycompany.airlinesproject.RoundedButton back_button3;

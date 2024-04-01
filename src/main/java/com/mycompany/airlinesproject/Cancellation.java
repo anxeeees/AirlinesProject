@@ -186,7 +186,7 @@ public class Cancellation extends javax.swing.JFrame {
 
         can_flight_code.setText("fTextField1");
 
-        can_ticket_id.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        can_ticket_id.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
         can_ticket_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 can_ticket_idActionPerformed(evt);

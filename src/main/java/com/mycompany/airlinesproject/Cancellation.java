@@ -354,13 +354,11 @@ public class Cancellation extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void can_ticket_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_can_ticket_idActionPerformed
-        // TODO add your handling code here:
+    private void can_ticket_idActionPerformed(java.awt.event.ActionEvent evt) {
         getFlightCode();
-    }//GEN-LAST:event_can_ticket_idActionPerformed
+    }
 
-    private void cancel_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancel_buttonMouseClicked
-        // TODO add your handling code here:
+    private void cancel_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if(can_flight_code.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         }
@@ -388,7 +386,7 @@ public class Cancellation extends javax.swing.JFrame {
         }
 
 
-    }//GEN-LAST:event_cancel_buttonMouseClicked
+    }
 
     private void cancel() {
         try {
@@ -396,71 +394,57 @@ public class Cancellation extends javax.swing.JFrame {
             String query = "Delete from booking where ticket_id="+can_ticket_id.getSelectedItem();
             Statement del = connection.createStatement();
             del.executeUpdate(query);
-           //JOptionPane.showMessageDialog(this, "Flight deleted");
-            //displayFlight();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e);
         }
     }
 
 
-    private void cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_buttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cancel_buttonActionPerformed
+    private void cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {
 
-    private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseClicked
+    }
+
+    private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         can_flight_code.setText("");
+    }
 
-    }//GEN-LAST:event_reset_buttonMouseClicked
+    private void reset_buttonMouseEntered(java.awt.event.MouseEvent evt) {
+    }
 
-    private void reset_buttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_buttonMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_reset_buttonMouseEntered
+    private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
-    private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_buttonActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_reset_buttonActionPerformed
-
-    private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_buttonMouseClicked
-
-        // TODO add your handling code here:
+    private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new MainForm().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_back_buttonMouseClicked
+    }
 
     Connection connection = null;
-    PreparedStatement pst = null;
     ResultSet rs = null, results1 = null;
     Statement st = null, statement1 = null;
 
 
     private void displayCan() {
         try {
-            // Establish connection to the database
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
 
-            // Create a statement
             st = connection.createStatement();
 
-            // Execute the query to retrieve data from the 'passengers' table
             rs = st.executeQuery("SELECT * FROM cancellation");
 
-            // Get the metadata of the ResultSet
             ResultSetMetaData metaData = rs.getMetaData();
 
-            // Get the number of columns
+
             int columnCount = metaData.getColumnCount();
 
-            // Create a DefaultTableModel to hold the data
+
             DefaultTableModel model = new DefaultTableModel();
 
-            // Add column names to the model
+
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
                 model.addColumn(metaData.getColumnName(columnIndex));
             }
 
-            // Add rows to the model
             while (rs.next()) {
                 Object[] rowData = new Object[columnCount];
                 for (int i = 0; i < columnCount; i++) {
@@ -469,10 +453,9 @@ public class Cancellation extends javax.swing.JFrame {
                 model.addRow(rowData);
             }
 
-            // Set the model to the JTable
             cancellation_table.setModel(model);
         } catch (Exception e) {
-            e.printStackTrace(); // Print any exceptions for debugging purposes
+            e.printStackTrace();
         }
     }
 
@@ -484,9 +467,9 @@ public class Cancellation extends javax.swing.JFrame {
             results1 = statement1.executeQuery("SELECT MAX(canc_id) FROM cancellation");
             results1.next();
             cancel_id  = results1.getInt(1) + 1;
-            connection.close(); // Close connection after retrieving the ticket_id
+            connection.close();
         } catch (Exception e) {
-            e.printStackTrace(); // Add error handling
+            e.printStackTrace();
         }
     }
     private void getTicket() {
@@ -527,30 +510,18 @@ public class Cancellation extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Create and display the form */
     java.awt.EventQueue.invokeLater(() -> {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            // Handle the look and feel exception for the entire application
-
         }
 
-        // button UI exception !!!!
         Cancellation cancellation = new Cancellation();
-        try {
-            // Your specific try-catch block for the button1 component
-            //loginScreen.button2.setText("Updated Button Text");
-        } catch (Exception e) {
-            // Handle the exception specific to button1 here
-
-        }
-
         cancellation.setVisible(true);
     });
 }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private com.mycompany.airlinesproject.RoundedButton back_button;
     private com.mycompany.airlinesproject.FTextField can_flight_code;
     private com.toedter.calendar.JDateChooser can_flight_date;
@@ -573,5 +544,5 @@ public class Cancellation extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private com.mycompany.airlinesproject.RoundedButton reset_button;
-    // End of variables declaration//GEN-END:variables
+
 }

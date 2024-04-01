@@ -190,7 +190,6 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void login_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
         if(username.getText().isEmpty() || password.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Enter username and password");
         } else if (username.getText().equals("admin") && password.getText().equals("admin")) {
@@ -220,15 +219,7 @@ public static void main(String args[]) {
 
         }
 
-        // button UI exception !!!!
         Login login = new Login();
-        try {
-
-        } catch (Exception e) {
-
-
-        }
-
         login.setVisible(true);
     });
 }

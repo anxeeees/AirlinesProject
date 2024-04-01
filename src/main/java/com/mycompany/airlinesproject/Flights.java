@@ -468,7 +468,7 @@ public class Flights extends javax.swing.JFrame {
 
     }
 
-
+// nejde editovat
     Connection connection = null;
 
     ResultSet rs = null;
@@ -511,7 +511,6 @@ public class Flights extends javax.swing.JFrame {
     }
 
     private void save_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
         if (flight_code.getText().isEmpty() || flight_nos.getText().isEmpty()
                 || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Missing information");
@@ -562,16 +561,7 @@ public class Flights extends javax.swing.JFrame {
                      UnsupportedLookAndFeelException ex) {
 
             }
-
-            // button UI exception !!!!
             Flights flights = new Flights();
-            try {
-
-            } catch (Exception e) {
-
-
-            }
-
             flights.setVisible(true);
         });
     }

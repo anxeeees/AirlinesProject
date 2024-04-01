@@ -524,7 +524,6 @@ public class Passenger extends javax.swing.JFrame {
 
     int key = 0;
     private void pass_tableMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)pass_table.getModel();
         int myIndex = pass_table.getSelectedRow();
         key = Integer.valueOf(model.getValueAt(myIndex,0).toString());
@@ -541,15 +540,12 @@ public class Passenger extends javax.swing.JFrame {
     }
 
     private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-
-        // TODO add your handling code here:
         new MainForm().setVisible(true);
         this.dispose();
 
     }
 
     private void del_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-         // TODO add your handling code here:
         if(key == 0) {
             JOptionPane.showMessageDialog(this, "select a passenger");
         }
@@ -569,7 +565,6 @@ public class Passenger extends javax.swing.JFrame {
     }
 
     private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-         // TODO add your handling code here:
          if(key == 0) {
             JOptionPane.showMessageDialog(this, "Select a passenger");
         } 
@@ -645,19 +640,8 @@ public class Passenger extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-
-
         }
-
-
         Passenger passenger = new Passenger();
-        try {
-
-        } catch (Exception e) {
-
-
-        }
-
         passenger.setVisible(true);
     });
 }

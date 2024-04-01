@@ -43,7 +43,6 @@ public class TicketBooking extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        airlinesProject1 = new com.mycompany.airlinesproject.AirlinesProject();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -725,8 +724,7 @@ public class TicketBooking extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.airlinesproject.AirlinesProject airlinesProject1;
+
     private com.mycompany.airlinesproject.RoundedButton back_button;
     private com.mycompany.airlinesproject.RoundedButton book_button;
     private javax.swing.JTable booking_table;

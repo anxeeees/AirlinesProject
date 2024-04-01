@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.mycompany.airlinesproject;
 
 /**
@@ -171,7 +168,7 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tickets_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tickets_buttonMouseClicked
+    private void tickets_buttonMouseClicked(java.awt.event.MouseEvent evt) {
 
         // TODO add your handling code here:
         new TicketBooking().setVisible(true);
@@ -179,63 +176,35 @@ public class MainForm extends javax.swing.JFrame {
         
         
 
-    }//GEN-LAST:event_tickets_buttonMouseClicked
+    }
 
-    private void canc_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_canc_buttonMouseClicked
-        // TODO add your handling code here:
+    private void canc_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new Cancellation().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_canc_buttonMouseClicked
+    }
 
-    private void back_button3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_back_button3MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_back_button3MouseClicked
+    private void back_button3MouseClicked(java.awt.event.MouseEvent evt) {
 
-    private void flights_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flights_buttonMouseClicked
-        // TODO add your handling code here:
+    }
+
+    private void flights_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new Flights().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_flights_buttonMouseClicked
+    }
 
-    private void pass_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pass_buttonMouseClicked
-        // TODO add your handling code here:
+    private void pass_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new Passenger().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_pass_buttonMouseClicked
+    }
 
-    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        // TODO add your handling code here:
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {
         System.exit(0);
-    }//GEN-LAST:event_jLabel7MouseClicked
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainForm().setVisible(true);
@@ -243,7 +212,6 @@ public class MainForm extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.mycompany.airlinesproject.RoundedButton back_button3;
     private com.mycompany.airlinesproject.RoundedButton canc_button;
     private com.mycompany.airlinesproject.RoundedButton flights_button;
@@ -253,5 +221,4 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private com.mycompany.airlinesproject.RoundedButton pass_button;
     private com.mycompany.airlinesproject.RoundedButton tickets_button;
-    // End of variables declaration//GEN-END:variables
 }

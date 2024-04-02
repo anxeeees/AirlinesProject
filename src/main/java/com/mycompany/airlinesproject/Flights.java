@@ -910,49 +910,62 @@ public class Flights extends javax.swing.JFrame {
     }
 
     private void delete_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (key == "") {
-            JOptionPane.showMessageDialog(this, "select a flight");
+        if (key == "0") {
+            JOptionPane.showMessageDialog(this, "Select a flight");
         } else {
-            try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                String query = "Delete from flight where code='" + key+"'";
-                Statement del = connection.createStatement();
-                del.executeUpdate(query);
-                JOptionPane.showMessageDialog(this, "Flight deleted");
-                displayFlight();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e);
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester")) {
+                connection.setAutoCommit(false); // Start transaction
+                String query = "DELETE FROM flight WHERE code = ?";
+                try (PreparedStatement del = connection.prepareStatement(query)) {
+                    del.setString(1, key);
+                    int row = del.executeUpdate();
+                    if (row > 0) {
+                        JOptionPane.showMessageDialog(this, "Flight deleted");
+                        connection.commit(); // Commit transaction
+                        displayFlight();
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+                try {
+                    connection.rollback(); // Rollback transaction
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
 
     private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-         if(key == "") {
-            JOptionPane.showMessageDialog(this, "Select a passenger");
-        } 
-        else {
-            try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
-                String query = "update flight set source=?,destination=?,date=?, seats=?" +
-                        "where code=?";
-                PreparedStatement add = connection.prepareStatement(query);
-                add.setString(5,key);
-                add.setString(1,flight_source.getSelectedItem().toString());
-                add.setString(2,flight_destination.getSelectedItem().toString());
-                add.setString(3,flight_tof.getDate().toString());
-                add.setString(4,flight_nos.getText());
-                int row = add.executeUpdate();
-                 JOptionPane.showMessageDialog(this, "Flight updated");
-                 connection.close();
-                  displayFlight();
-                  clear();
-                
-            }
-            catch(Exception e) {
-                JOptionPane.showMessageDialog(this, e);
+        if (key=="0") {
+            JOptionPane.showMessageDialog(this, "Select a flight");
+        } else {
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester")) {
+                connection.setAutoCommit(false); // Start transaction
+                String query = "UPDATE flight SET source=?, destination=?, date=?, seats=? WHERE code=?";
+                try (PreparedStatement add = connection.prepareStatement(query)) {
+                    add.setString(1, flight_source.getSelectedItem().toString());
+                    add.setString(2, flight_destination.getSelectedItem().toString());
+                    add.setString(3, flight_tof.getDate().toString());
+                    add.setString(4, flight_nos.getText());
+                    add.setString(5, key);
+                    int row = add.executeUpdate();
+                    if (row > 0) {
+                        JOptionPane.showMessageDialog(this, "Flight updated");
+                        connection.commit(); // Commit transaction
+                        displayFlight();
+                        clear();
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+                try {
+                    connection.rollback(); // Rollback transaction
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
-
     }
 
 // nejde editovat
@@ -1002,26 +1015,32 @@ public class Flights extends javax.swing.JFrame {
                 || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            try {
-
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                PreparedStatement add = connection.prepareStatement("Insert into flight values (?,?,?,?,?)");
-                add.setString(1, flight_code.getText());
-                add.setString(2, flight_source.getSelectedItem().toString());
-                add.setString(3, flight_destination.getSelectedItem().toString());
-                add.setString(4, flight_tof.getDate().toString());
-                add.setInt(5, Integer.valueOf(flight_nos.getText()));
-                int row = add.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Flight added");
-                connection.close();
-                displayFlight();
-                clear();
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e);
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester")) {
+                connection.setAutoCommit(false); // Start transaction
+                String query = "INSERT INTO flight VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement add = connection.prepareStatement(query)) {
+                    add.setString(1, flight_code.getText());
+                    add.setString(2, flight_source.getSelectedItem().toString());
+                    add.setString(3, flight_destination.getSelectedItem().toString());
+                    add.setString(4, flight_tof.getDate().toString());
+                    add.setInt(5, Integer.valueOf(flight_nos.getText()));
+                    int row = add.executeUpdate();
+                    if (row > 0) {
+                        JOptionPane.showMessageDialog(this, "Flight added");
+                        connection.commit(); // Commit transaction
+                        displayFlight();
+                        clear();
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+                try {
+                    connection.rollback(); // Rollback transaction
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
-
     }
 
     String key = "";

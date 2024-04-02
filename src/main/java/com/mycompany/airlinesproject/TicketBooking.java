@@ -627,31 +627,43 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-        if(tb_pass_id.getSelectedIndex() == -1 ||tb_flight_code.getSelectedIndex() == -1
-                || tb_amount.getText().isEmpty()) {
+        if (tb_pass_id.getSelectedIndex() == -1 || tb_flight_code.getSelectedIndex() == -1 || tb_amount.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
-        }
-        else {
+        } else {
             try {
                 countFlights();
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
-                PreparedStatement add = connection.prepareStatement("Insert into booking values (?,?,?,?,?,?,?)");
-                add.setInt(1,ticket_id);
-                add.setString(2,tb_name.getText());
-                add.setString(3,tb_flight_code.getSelectedItem().toString());
-                add.setString(4,tb_gender.getText());
-                add.setString(5,tb_passport.getText());
-                add.setInt(6,Integer.valueOf(tb_amount.getText()));
-                add.setString(7,tb_nationality.getText());
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+                connection.setAutoCommit(false); // Start transaction
+                PreparedStatement add = connection.prepareStatement("INSERT INTO booking VALUES (?,?,?,?,?,?,?)");
+                add.setInt(1, ticket_id);
+                add.setString(2, tb_name.getText());
+                add.setString(3, tb_flight_code.getSelectedItem().toString());
+                add.setString(4, tb_gender.getText());
+                add.setString(5, tb_passport.getText());
+                add.setInt(6, Integer.valueOf(tb_amount.getText()));
+                add.setString(7, tb_nationality.getText());
                 int row = add.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Ticket added");
-                connection.close();
-                displayBooking();
-                clear();
-            }
-            catch(Exception e) {
-                JOptionPane.showMessageDialog(this, e);
+                if (row > 0) {
+                    JOptionPane.showMessageDialog(this, "Ticket added");
+                    connection.commit(); // Commit transaction
+                    displayBooking();
+                    clear();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+                try {
+                    connection.rollback(); // Rollback transaction
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            } finally {
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }

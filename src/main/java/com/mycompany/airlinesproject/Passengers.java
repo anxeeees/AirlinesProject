@@ -4,9 +4,13 @@
  */
 package com.mycompany.airlinesproject;
 
-
+import com.mycompany.airlinesproject.entities.Flight;
+import com.mycompany.airlinesproject.entities.Passenger;
+import com.mycompany.airlinesproject.ropositories.PassengerRepository;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -18,13 +22,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ester
  */
-public class Passenger extends javax.swing.JFrame {
+public class Passengers extends javax.swing.JFrame {
+    private PassengerRepository passengerRepository;
+
 
     /**
      * Creates new form Passenger2
      */
-   public Passenger() {
-    initComponents();
+   public Passengers() {
+       passengerRepository = new PassengerRepository();
       displayPassengers();
 }
     /**
@@ -662,8 +668,9 @@ public class Passenger extends javax.swing.JFrame {
     Statement st = null, statement1 = null;
 
     private void displayPassengers() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
+        List<Passenger> passengers = passengerRepository.getPassenger();
+        /*try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","root");
             st = connection.createStatement();
             rs = st.executeQuery("SELECT * FROM passengers");
 
@@ -692,7 +699,29 @@ public class Passenger extends javax.swing.JFrame {
             pass_table.setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+
+        Vector<String> tableHeaders = new Vector<String>();
+        Vector tableData = new Vector();
+        tableHeaders.add("Name");
+        tableHeaders.add("Nationality");
+        tableHeaders.add("Gender");
+        tableHeaders.add("Passport");
+        tableHeaders.add("Address");
+        tableHeaders.add("Phone");
+
+        for(Passenger passenger : passengers) {
+
+            Vector<Object> oneRow = new Vector<Object>();
+            oneRow.add(passenger.getName());
+            oneRow.add(passenger.getNationality());
+            oneRow.add(passenger.getGender());
+            oneRow.add(passenger.getPassport());
+            oneRow.add(passenger.getAddress());
+            oneRow.add(passenger.getPhone());
+            tableData.add(oneRow);
         }
+        pass_table.setModel(new DefaultTableModel(tableData, tableHeaders));
     }
 
     int pass_id = 0;
@@ -807,7 +836,11 @@ public class Passenger extends javax.swing.JFrame {
                 || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            try {
+            Passenger passenger = new Passenger(pass_name.getText(), pass_nat.getSelectedItem().toString(), pass_gender.getSelectedItem().toString(), pass_pnum.getText(), pass_address.getText(),pass_phone.getText());
+            passengerRepository.savePassenger(passenger);
+            JOptionPane.showMessageDialog(this, "Flight added");
+            displayPassengers();
+            /*try {
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
                 connection.setAutoCommit(false); // Start transaction
                 countPassengers();
@@ -835,7 +868,7 @@ public class Passenger extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-            }
+            } */
         }
     }
 
@@ -855,7 +888,7 @@ public class Passenger extends javax.swing.JFrame {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
         }
-        Passenger passenger = new Passenger();
+        Passengers passenger = new Passengers();
         passenger.setVisible(true);
     });
 }

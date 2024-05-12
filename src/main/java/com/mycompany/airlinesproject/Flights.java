@@ -1,8 +1,13 @@
 
 package com.mycompany.airlinesproject;
 
+import com.mycompany.airlinesproject.entities.Flight;
+import com.mycompany.airlinesproject.ropositories.FlightRepository;
+
 import java.sql.*;
+import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -13,11 +18,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Flights extends javax.swing.JFrame {
 
+    private FlightRepository flightRepository;
+
     /**
      * Creates new form Flights
      */
     public Flights() {
         initComponents();
+        flightRepository = new FlightRepository();
         displayFlight();
     }
 
@@ -975,34 +983,53 @@ public class Flights extends javax.swing.JFrame {
     Statement st = null;
 
     private void displayFlight() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-            st = connection.createStatement();
-            rs = st.executeQuery("SELECT * FROM flight");
+        List<Flight> flights = flightRepository.getFlights();
+//        try {
+//            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
+//            st = connection.createStatement();
+//            rs = st.executeQuery("SELECT * FROM flight");
+//
+//
+//            ResultSetMetaData metaData = rs.getMetaData();
+//            int columnCount = metaData.getColumnCount();
+//            DefaultTableModel model = new DefaultTableModel();
+//
+//
+//            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+//                model.addColumn(metaData.getColumnName(columnIndex));
+//            }
+//
+//
+//            while (rs.next()) {
+//                Object[] rowData = new Object[columnCount];
+//                for (int i = 0; i < columnCount; i++) {
+//                    rowData[i] = rs.getObject(i + 1);
+//                }
+//                model.addRow(rowData);
+//            }
+//
+//            flight_table.setModel(model);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
+        Vector<String> tableHeaders = new Vector<String>();
+        Vector tableData = new Vector();
+        tableHeaders.add("Code");
+        tableHeaders.add("Source");
+        tableHeaders.add("Destination");
+        tableHeaders.add("Date");
 
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            DefaultTableModel model = new DefaultTableModel();
+        for(Flight flight : flights) {
 
-
-            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                model.addColumn(metaData.getColumnName(columnIndex));
-            }
-
-
-            while (rs.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = rs.getObject(i + 1);
-                }
-                model.addRow(rowData);
-            }
-
-            flight_table.setModel(model);
-        } catch (Exception e) {
-            e.printStackTrace();
+            Vector<Object> oneRow = new Vector<Object>();
+            oneRow.add(flight.getCode());
+            oneRow.add(flight.getSource());
+            oneRow.add(flight.getDestination());
+            oneRow.add(flight.getDate());
+            tableData.add(oneRow);
         }
+        flight_table.setModel(new DefaultTableModel(tableData, tableHeaders));
     }
 
     private void clear() {
@@ -1015,31 +1042,36 @@ public class Flights extends javax.swing.JFrame {
                 || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester")) {
-                connection.setAutoCommit(false); // Start transaction
-                String query = "INSERT INTO flight VALUES (?, ?, ?, ?, ?)";
-                try (PreparedStatement add = connection.prepareStatement(query)) {
-                    add.setString(1, flight_code.getText());
-                    add.setString(2, flight_source.getSelectedItem().toString());
-                    add.setString(3, flight_destination.getSelectedItem().toString());
-                    add.setString(4, flight_tof.getDate().toString());
-                    add.setInt(5, Integer.valueOf(flight_nos.getText()));
-                    int row = add.executeUpdate();
-                    if (row > 0) {
-                        JOptionPane.showMessageDialog(this, "Flight added");
-                        connection.commit(); // Commit transaction
-                        displayFlight();
-                        clear();
-                    }
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                try {
-                    connection.rollback(); // Rollback transaction
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            Flight flight = new Flight(flight_code.getText(), flight_source.getSelectedItem().toString(), flight_destination.getSelectedItem().toString(), flight_tof.getDate(), Integer.valueOf(flight_nos.getText()));
+            flightRepository.saveFlight(flight);
+            JOptionPane.showMessageDialog(this, "Flight added");
+            displayFlight();
+
+//            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester")) {
+//                connection.setAutoCommit(false); // Start transaction
+//                String query = "INSERT INTO flight VALUES (?, ?, ?, ?, ?)";
+//                try (PreparedStatement add = connection.prepareStatement(query)) {
+//                    add.setString(1, flight_code.getText());
+//                    add.setString(2, flight_source.getSelectedItem().toString());
+//                    add.setString(3, flight_destination.getSelectedItem().toString());
+//                    add.setString(4, flight_tof.getDate().toString());
+//                    add.setInt(5, Integer.valueOf(flight_nos.getText()));
+//                    int row = add.executeUpdate();
+//                    if (row > 0) {
+//                        JOptionPane.showMessageDialog(this, "Flight added");
+//                        connection.commit(); // Commit transaction
+//                        displayFlight();
+//                        clear();
+//                    }
+//                }
+//            } catch (SQLException e) {
+//                JOptionPane.showMessageDialog(this, e.getMessage());
+//                try {
+//                    connection.rollback(); // Rollback transaction
+//                } catch (SQLException ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
         }
     }
 

@@ -1,6 +1,12 @@
 
 package com.mycompany.airlinesproject;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
 import javax.swing.*;
 
 /**
@@ -8,6 +14,8 @@ import javax.swing.*;
  * @author Ester
  */
 public class MainForm extends javax.swing.JFrame {
+
+    private static SessionFactory sessionFactory;
 
     /**
      * Creates new form MainForm
@@ -195,7 +203,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void pass_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        new Passenger().setVisible(true);
+        new Passengers().setVisible(true);
         this.dispose();
     }
 
@@ -203,10 +211,31 @@ public class MainForm extends javax.swing.JFrame {
         System.exit(0);
     }
 
+    private static void setUp() throws Exception {
+        try {
+            if (sessionFactory == null) {
+                StandardServiceRegistry standardRegistry
+                        = new StandardServiceRegistryBuilder()
+                        .configure()
+                        .build();
+
+                Metadata metadata = new MetadataSources(standardRegistry)
+                        .getMetadataBuilder()
+                        .build();
+
+                sessionFactory = metadata.getSessionFactoryBuilder().build();
+            }
+
+        } catch (Throwable ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
+        setUp();
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {

@@ -45,7 +45,7 @@ public class PassengerRepository {
         session.close();
     }
 
-    public List<Passenger> getPassenger(){
+    public List<Passenger> getPassengers(){
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Query query = session.createQuery("from Passenger");

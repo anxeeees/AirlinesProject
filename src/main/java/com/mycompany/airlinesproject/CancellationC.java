@@ -4,8 +4,16 @@
  */
 package com.mycompany.airlinesproject;
 
+import com.mycompany.airlinesproject.entities.Cancellation;
+import com.mycompany.airlinesproject.entities.Flight;
+import com.mycompany.airlinesproject.ropositories.CancellationRepository;
+import com.mycompany.airlinesproject.ropositories.FlightRepository;
+import com.mycompany.airlinesproject.ropositories.PassengerRepository;
+
 import java.sql.*;
+import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,13 +21,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ester
  */
-public class Cancellation extends javax.swing.JFrame {
+public class CancellationC extends javax.swing.JFrame {
+    private CancellationRepository cancellationRepository;
+
 
     /**
      * Creates new form Cancelation
      */
-    public Cancellation() {
+    public CancellationC() {
         initComponents();
+        cancellationRepository = new CancellationRepository();
         getTicket();
         can_flight_code.setEditable(false);
         displayCan();
@@ -361,7 +372,13 @@ public class Cancellation extends javax.swing.JFrame {
         if (can_flight_code.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            try {
+            Cancellation cancellation = new Cancellation(Long.parseLong(can_ticket_id.getSelectedItem().toString()),can_flight_code.getText(),can_flight_date.getDate());
+            cancellationRepository.saveCancellation(cancellation);
+            JOptionPane.showMessageDialog(this, "Cancellation added");
+            cancel();
+            displayCan();
+            getTicket();
+            /*try {
                 countCancellation();
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
                 connection.setAutoCommit(false); // Začátek transakce
@@ -399,7 +416,7 @@ public class Cancellation extends javax.swing.JFrame {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
     }
 
@@ -440,7 +457,26 @@ public class Cancellation extends javax.swing.JFrame {
 
 
     private void displayCan() {
-        try {
+        List<Cancellation> cancellations = cancellationRepository.getCancellations();
+
+        Vector<String> tableHeaders = new Vector<String>();
+        Vector tableData = new Vector();
+        tableHeaders.add("Cancellation_id");
+        tableHeaders.add("Ticket_id");
+        tableHeaders.add("Code");
+        tableHeaders.add("Cancelation_date");
+
+        for(Cancellation cancellation : cancellations) {
+
+            Vector<Object> oneRow = new Vector<Object>();
+            oneRow.add(cancellation.getCode());
+            oneRow.add(cancellation.getTicketId());
+            oneRow.add(cancellation.getCode());
+            oneRow.add(cancellation.getCancellationDate());
+            tableData.add(oneRow);
+        }
+        cancellation_table.setModel(new DefaultTableModel(tableData, tableHeaders));
+        /*try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
 
             st = connection.createStatement();
@@ -471,7 +507,7 @@ public class Cancellation extends javax.swing.JFrame {
             cancellation_table.setModel(model);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     int cancel_id = 0;
@@ -531,7 +567,7 @@ public class Cancellation extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
         }
 
-        Cancellation cancellation = new Cancellation();
+        CancellationC cancellation = new CancellationC();
         cancellation.setVisible(true);
     });
 }

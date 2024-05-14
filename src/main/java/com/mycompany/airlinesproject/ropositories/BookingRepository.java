@@ -1,12 +1,16 @@
 package com.mycompany.airlinesproject.ropositories;
 
 import com.mycompany.airlinesproject.entities.Booking;
+import com.mycompany.airlinesproject.entities.Passenger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 
 public class BookingRepository {
@@ -35,12 +39,20 @@ public class BookingRepository {
     }
 
     public void saveBooking(Booking booking) {
-
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.persist(booking);
         session.getTransaction().commit();
         session.close();
+
+    }
+
+    public List<Booking> getBookings(){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Booking");
+        List<Booking> bookings = query.list();
+        return bookings;
 
     }
 }

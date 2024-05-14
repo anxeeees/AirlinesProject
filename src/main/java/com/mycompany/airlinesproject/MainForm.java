@@ -189,7 +189,7 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     private void canc_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        new Cancellation().setVisible(true);
+        new CancellationC().setVisible(true);
         this.dispose();
     }
 

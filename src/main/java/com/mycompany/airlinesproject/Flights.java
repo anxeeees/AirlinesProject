@@ -991,6 +991,7 @@ public class Flights extends javax.swing.JFrame {
         tableHeaders.add("Source");
         tableHeaders.add("Destination");
         tableHeaders.add("Date");
+        tableHeaders.add("Seats");
 
         for(Flight flight : flights) {
 
@@ -999,6 +1000,7 @@ public class Flights extends javax.swing.JFrame {
             oneRow.add(flight.getSource());
             oneRow.add(flight.getDestination());
             oneRow.add(flight.getDate());
+            oneRow.add(flight.getSeats());
             tableData.add(oneRow);
         }
         flight_table.setModel(new DefaultTableModel(tableData, tableHeaders));

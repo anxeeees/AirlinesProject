@@ -10,6 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class FlightRepository {
@@ -63,6 +64,32 @@ public class FlightRepository {
         return flights;
 
     }
+
+    public void deleteFlight(String code) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query q = session.createQuery("delete from Flight  where code =:code");
+        q.setParameter("code", code);
+        q.executeUpdate();
+    }
+
+    public void updateFlight(String code, String source, String destination, Date date, String seats){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Flight where code =:code");
+        query.setParameter("code", code);
+        Flight flight = (Flight) query.getSingleResult();
+        flight.setSource(source);
+        flight.setDestination(destination);
+        flight.setDate(date);
+        flight.setSeats(Integer.parseInt(seats));
+        session.persist(flight);
+        session.getTransaction().commit();
+        session.close();
+
+
+    }
+
 
 
 }

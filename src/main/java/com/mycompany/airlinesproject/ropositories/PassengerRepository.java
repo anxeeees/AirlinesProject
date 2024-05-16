@@ -1,5 +1,6 @@
 package com.mycompany.airlinesproject.ropositories;
 
+import com.mycompany.airlinesproject.entities.Flight;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -9,6 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import com.mycompany.airlinesproject.entities.Passenger;
 import org.hibernate.query.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public class PassengerRepository {
@@ -53,4 +55,30 @@ public class PassengerRepository {
         return passengers;
 
     }
+    public void deletePassenger(String passengerId) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query q = session.createQuery("delete from Passenger  where passengerId =:passengerId");
+        q.setParameter("passengerId", passengerId);
+        q.executeUpdate();
+    }
+
+    public void updatePassenger(String passengerId, String name, String nationality, String gender, String passport, String address, String phone){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Passenger where passengerId =:passengerId");
+        query.setParameter("passengerId", passengerId);
+        Passenger passenger = (Passenger) query.getSingleResult();
+        passenger.setName(name);
+        passenger.setNationality(nationality);
+        passenger.setGender(gender);
+        passenger.setPassport(passport);
+        passenger.setAddress(address);
+        passenger.setPhone(phone);
+        session.persist(passenger);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+
 }

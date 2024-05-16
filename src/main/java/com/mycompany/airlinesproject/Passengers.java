@@ -665,11 +665,6 @@ public class Passengers extends javax.swing.JFrame {
     }
 
 
-
-    Connection connection = null;
-    ResultSet rs = null, results1 = null;
-    Statement st = null, statement1 = null;
-
     private void displayPassengers() {
         List<Passenger> passengers = passengerRepository.getPassengers();
 
@@ -700,24 +695,14 @@ public class Passengers extends javax.swing.JFrame {
 
     }
 
-    int pass_id = 0;
-    private void countPassengers() {
-        try {
-            statement1 = connection.createStatement();
-            results1 = statement1.executeQuery("SELECT MAX(pass_id) FROM passengers");
-            results1.next();
-            pass_id = results1.getInt(1) +1;
-
-        } catch (Exception e) {
-
-        }
-    }
 
     private void clear() {
         pass_name.setText("");
         pass_pnum.setText("");
         pass_address.setText("");
         pass_phone.setText("");
+        pass_nat.setSelectedIndex(0);
+        pass_gender.setSelectedIndex(0);
     }
 
 
@@ -732,7 +717,6 @@ public class Passengers extends javax.swing.JFrame {
         pass_pnum.setText(model.getValueAt(myIndex,4).toString());
         pass_address.setText(model.getValueAt(myIndex,5).toString());
         pass_phone.setText(model.getValueAt(myIndex,6).toString());
-
     }
 
     private void pass_nameActionPerformed(java.awt.event.ActionEvent evt) {
@@ -748,62 +732,26 @@ public class Passengers extends javax.swing.JFrame {
         if (key == 0) {
             JOptionPane.showMessageDialog(this, "Select a passenger");
         } else {
-            try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                connection.setAutoCommit(false); // Start transaction
-                String query = "DELETE FROM passengers WHERE pass_id=?";
-                try (PreparedStatement del = connection.prepareStatement(query)) {
-                    del.setInt(1, key);
-                    int row = del.executeUpdate();
-                    if (row > 0) {
-                        JOptionPane.showMessageDialog(this, "Passenger deleted");
-                        connection.commit(); // Commit transaction
-                        displayPassengers();
-                    }
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                try {
-                    connection.rollback(); // Rollback transaction
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            passengerRepository.deletePassenger(String.valueOf(key));
+            JOptionPane.showMessageDialog(this, "Passenger deleted");
+            displayPassengers();
+           clear();
         }
     }
+
 
     private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (key == 0) {
             JOptionPane.showMessageDialog(this, "Select a passenger");
-        } else {
-            try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                connection.setAutoCommit(false); // Start transaction
-                String query = "UPDATE passengers SET name=?, nationality=?, gender=?, passport=?, address=?, phone=? WHERE pass_id=?";
-                try (PreparedStatement add = connection.prepareStatement(query)) {
-                    add.setString(1, pass_name.getText());
-                    add.setString(2, pass_nat.getSelectedItem().toString());
-                    add.setString(3, pass_gender.getSelectedItem().toString());
-                    add.setString(4, pass_pnum.getText());
-                    add.setString(5, pass_address.getText());
-                    add.setString(6, pass_phone.getText());
-                    add.setInt(7, key);
-                    int row = add.executeUpdate();
-                    if (row > 0) {
-                        JOptionPane.showMessageDialog(this, "Passenger updated");
-                        connection.commit(); // Commit transaction
-                        displayPassengers();
-                        clear();
-                    }
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                try {
-                    connection.rollback(); // Rollback transaction
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+        } else if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
+                || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Missing information"); {
             }
+        }else {
+            passengerRepository.updatePassenger(String.valueOf(key),pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(), pass_address.getText(),pass_phone.getText());
+            JOptionPane.showMessageDialog(this, "Passenger updated");
+            displayPassengers();
+            clear();
         }
     }
 
@@ -816,35 +764,7 @@ public class Passengers extends javax.swing.JFrame {
             passengerRepository.savePassenger(passenger);
             JOptionPane.showMessageDialog(this, "Passenger added");
             displayPassengers();
-            /*try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                connection.setAutoCommit(false); // Start transaction
-                countPassengers();
-                String query = "INSERT INTO passengers VALUES (?, ?, ?, ?, ?, ?, ?)";
-                try (PreparedStatement add = connection.prepareStatement(query)) {
-                    add.setInt(1, pass_id);
-                    add.setString(2, pass_name.getText());
-                    add.setString(3, pass_nat.getSelectedItem().toString());
-                    add.setString(4, pass_gender.getSelectedItem().toString());
-                    add.setString(5, pass_pnum.getText());
-                    add.setString(6, pass_address.getText());
-                    add.setString(7, pass_phone.getText());
-                    int row = add.executeUpdate();
-                    if (row > 0) {
-                        JOptionPane.showMessageDialog(this, "Passenger added");
-                        connection.commit(); // Commit transaction
-                        displayPassengers();
-                        clear();
-                    }
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                try {
-                    connection.rollback(); // Rollback transaction
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }*/
+            clear();
         }
     }
 

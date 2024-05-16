@@ -5,9 +5,10 @@ import com.mycompany.airlinesproject.entities.Flight;
 import com.mycompany.airlinesproject.ropositories.FlightRepository;
 
 import java.sql.*;
-import java.util.List;
-import java.util.Locale;
-import java.util.Vector;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -103,13 +104,13 @@ public class Flights extends javax.swing.JFrame {
         jLabel9.setText("SkyWing Airlines");
 
         flight_table.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
                         {},
                         {},
                         {},
                         {}
                 },
-                new String [] {
+                new String[]{
 
                 }
         ));
@@ -128,7 +129,7 @@ public class Flights extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel10.setText("Destination");
 
-        flight_destination.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {
+        flight_destination.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
                 "New York",
                 "Los Angeles",
                 "London",
@@ -377,9 +378,6 @@ public class Flights extends javax.swing.JFrame {
         }));
 
 
-
-
-
         jPanel5.setBackground(new java.awt.Color(220, 219, 219));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -484,7 +482,7 @@ public class Flights extends javax.swing.JFrame {
                         .addGap(0, 8, Short.MAX_VALUE)
         );
 
-        flight_source.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {
+        flight_source.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
                 "New York",
                 "Los Angeles",
                 "London",
@@ -922,34 +920,21 @@ public class Flights extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select a flight");
         } else {
             flightRepository.deleteFlight(key);
+            JOptionPane.showMessageDialog(this, "Flight deleted");
             displayFlight();
-            /*try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester")) {
-                connection.setAutoCommit(false); // Start transaction
-                String query = "DELETE FROM flight WHERE code = ?";
-                try (PreparedStatement del = connection.prepareStatement(query)) {
-                    del.setString(1, key);
-                    int row = del.executeUpdate();
-                    if (row > 0) {
-                        JOptionPane.showMessageDialog(this, "Flight deleted");
-                        connection.commit(); // Commit transaction
-                        displayFlight();
-                    }
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                try {
-                    connection.rollback(); // Rollback transaction
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }*/
-
+            clear();
         }
     }
 
     private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (key=="0") {
-            JOptionPane.showMessageDialog(this, "Select a flight");
-        } else {
+        if  (flight_code.getText().isEmpty() || flight_nos.getText().isEmpty()
+                || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1 ||  flight_tof.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Missing information");
+            }
+        else if(!Objects.equals(flight_code.getText(), key)) {
+            JOptionPane.showMessageDialog(this, "Incorrect flight");
+        }
+         else {
             flightRepository.updateFlight(flight_code.getText(), flight_source.getSelectedItem().toString(), flight_destination.getSelectedItem().toString(), flight_tof.getDate(), flight_nos.getText());
             JOptionPane.showMessageDialog(this, "Flight updated");
             displayFlight();
@@ -957,11 +942,6 @@ public class Flights extends javax.swing.JFrame {
         }
     }
 
-    // nejde editovat
-    Connection connection = null;
-
-    ResultSet rs = null;
-    Statement st = null;
 
     private void displayFlight() {
         List<Flight> flights = flightRepository.getFlights();
@@ -974,7 +954,7 @@ public class Flights extends javax.swing.JFrame {
         tableHeaders.add("Date");
         tableHeaders.add("Seats");
 
-        for(Flight flight : flights) {
+        for (Flight flight : flights) {
 
             Vector<Object> oneRow = new Vector<Object>();
             oneRow.add(flight.getCode());
@@ -990,17 +970,23 @@ public class Flights extends javax.swing.JFrame {
     private void clear() {
         flight_code.setText("");
         flight_nos.setText("");
+        flight_source.setSelectedIndex(0);
+        flight_destination.setSelectedIndex(0);
+        flight_nos.setText("");
+        flight_tof.setDate(null);
     }
 
     private void save_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (flight_code.getText().isEmpty() || flight_nos.getText().isEmpty()
-                || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1) {
+                || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1 || flight_tof.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Missing information");
-        } else {
+        }
+        else {
             Flight flight = new Flight(flight_code.getText(), flight_source.getSelectedItem().toString(), flight_destination.getSelectedItem().toString(), flight_tof.getDate(), Integer.valueOf(flight_nos.getText()));
             flightRepository.saveFlight(flight);
             JOptionPane.showMessageDialog(this, "Flight added");
             displayFlight();
+            clear();
         }
     }
 
@@ -1009,12 +995,12 @@ public class Flights extends javax.swing.JFrame {
     private void flight_tableMouseClicked(java.awt.event.MouseEvent evt) {
         DefaultTableModel model = (DefaultTableModel) flight_table.getModel();
         int myIndex = flight_table.getSelectedRow();
-        key = model.getValueAt(myIndex, 0).toString();
+        key = model.getValueAt(myIndex,0).toString();
+        flight_code.setText(model.getValueAt(myIndex,0).toString());
         flight_source.setSelectedItem(model.getValueAt(myIndex, 1).toString());
         flight_destination.setSelectedItem(model.getValueAt(myIndex, 2).toString());
-        flight_nos.setText(model.getValueAt(myIndex,4).toString());
-
-
+        flight_tof.setDate((Date) model.getValueAt(myIndex,3));
+        flight_nos.setText(model.getValueAt(myIndex, 4).toString());
     }
 
     /**

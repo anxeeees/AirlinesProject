@@ -6,14 +6,19 @@ package com.mycompany.airlinesproject;
 
 import com.mycompany.airlinesproject.entities.Booking;
 import com.mycompany.airlinesproject.entities.Cancellation;
+import com.mycompany.airlinesproject.entities.Flight;
+import com.mycompany.airlinesproject.entities.Passenger;
 import com.mycompany.airlinesproject.ropositories.BookingRepository;
 import com.mycompany.airlinesproject.ropositories.CancellationRepository;
+import com.mycompany.airlinesproject.ropositories.FlightRepository;
+import com.mycompany.airlinesproject.ropositories.PassengerRepository;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -28,6 +33,9 @@ import static org.apache.commons.dbutils.DbUtils.*;
 public class TicketBooking extends javax.swing.JFrame {
 
     private BookingRepository bookingRepository;
+    private PassengerRepository passengerRepository;
+
+    private FlightRepository flightRepository;
 
     /**
      * Creates new form Passenger2
@@ -35,6 +43,8 @@ public class TicketBooking extends javax.swing.JFrame {
     public TicketBooking() {
         initComponents();
         bookingRepository = new BookingRepository();
+        passengerRepository = new PassengerRepository();
+        flightRepository = new FlightRepository();
         getPassenger();
         getFlight();
         displayBooking();
@@ -43,6 +53,8 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_passport.setEditable(false);
         tb_gender.setEditable(false);
     }
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -511,43 +523,17 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
-    Connection connection = null;
-    ResultSet rs = null, results1 = null;
-    Statement st = null, statement1 = null;
 
-
-    private void getPassenger() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-            st = connection.createStatement();
-            String query = "select * from passengers";
-            rs = st.executeQuery(query);
-            while (rs.next()) {
-                String pass_id = String.valueOf(rs.getInt("pass_id"));
-                tb_pass_id.addItem(pass_id);
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     private void getFlight() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-            st = connection.createStatement();
-            String query = "select * from flight";
-            rs = st.executeQuery(query);
-            while (rs.next()) {
-                String flight_code = rs.getString("code");
-                tb_flight_code.addItem(flight_code);
-            }
-        } catch (Exception e) {
-
+            List<Flight> flights = flightRepository.getFlights();
+            for (Flight flight : flights) {
+                tb_flight_code.addItem(String.valueOf(flight.getCode()));
         }
     }
 
     public void getPassData() {
-        String query = "select * from passengers where pass_id=" + tb_pass_id.getSelectedItem().toString();
+       /* String query = "select * from passengers where pass_id=" + tb_pass_id.getSelectedItem().toString();
         Statement statement;
         ResultSet resultSet;
 
@@ -563,8 +549,8 @@ public class TicketBooking extends javax.swing.JFrame {
 
             }
         } catch (Exception e) {
+*/
 
-        }
     }
 
 
@@ -580,6 +566,19 @@ public class TicketBooking extends javax.swing.JFrame {
     private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         clear();
     }
+
+    private void getPassenger() {
+        List<Passenger> passengers = passengerRepository.getPassengers();
+        for (Passenger passenger : passengers) {
+            int passId = Math.toIntExact(passenger.getPassengerId());
+            tb_pass_id.addItem(String.valueOf(passId));
+                tb_name.setText(passenger.getName());
+                tb_gender.setText(passenger.getGender());
+                tb_passport.setText(passenger.getPassport());
+                tb_nationality.setText(passenger.getNationality());
+            }
+        }
+
 
     private void displayBooking() {
 
@@ -608,50 +607,16 @@ public class TicketBooking extends javax.swing.JFrame {
             tableData.add(oneRow);
         }
         booking_table.setModel(new DefaultTableModel(tableData, tableHeaders));
-       /* try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
-            st = connection.createStatement();
-            rs = st.executeQuery("SELECT * FROM booking");
 
-
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            DefaultTableModel model = new DefaultTableModel();
-
-
-            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                model.addColumn(metaData.getColumnName(columnIndex));
-            }
-
-
-            while (rs.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = rs.getObject(i + 1);
-                }
-                model.addRow(rowData);
-            }
-
-
-            booking_table.setModel(model);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
-    Long ticket_id = 0L;
+    //Long ticket_id = 0L;
     private void countFlights() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
-            statement1 = connection.createStatement();
-            results1 = statement1.executeQuery("SELECT MAX(ticket_id) FROM booking");
-            results1.next();
-            ticket_id = results1.getLong(1) + 1;
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+      //ticket_id++;
     }
+
+
 
     private void clear() {
         tb_flight_code.setSelectedIndex(-1);
@@ -662,62 +627,37 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_amount.setText("");
     }
 
+
+    // iterace
+    Long start_id = 0L;
+    Long new_id = start_id++;
+
+    private void updateId() {
+       new_id =  start_id++;;
+    }
+
+
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {
+
+
         if (tb_pass_id.getSelectedIndex() == -1 || tb_flight_code.getSelectedIndex() == -1 || tb_amount.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
             try {
-                countFlights();
-                // Získání ticketId z někdejšího zdroje
-                Booking booking = new Booking(ticket_id, tb_name.getText(), Objects.requireNonNull(tb_flight_code.getSelectedItem()).toString(), tb_gender.getText(), tb_passport.getText(), Integer.valueOf(tb_amount.getText()), tb_nationality.getText());
+                Booking booking = new Booking(new_id, tb_name.getText(), Objects.requireNonNull(tb_flight_code.getSelectedItem()).toString(), tb_gender.getText(), tb_passport.getText(), Integer.valueOf(tb_amount.getText()), tb_nationality.getText());
                 bookingRepository.saveBooking(booking);
-
+                updateId();
                 JOptionPane.showMessageDialog(this, "Booking added");
-
                 displayBooking();
                 clear();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error adding booking: " + e.getMessage());
             }
         }
+    }
 
-           /* try {
-                countFlights();
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                connection.setAutoCommit(false); // Start transaction
-                PreparedStatement add = connection.prepareStatement("INSERT INTO booking VALUES (?,?,?,?,?,?,?)");
-                add.setInt(1, ticket_id);
-                add.setString(2, tb_name.getText());
-                add.setString(3, tb_flight_code.getSelectedItem().toString());
-                add.setString(4, tb_gender.getText());
-                add.setString(5, tb_passport.getText());
-                add.setInt(6, Integer.valueOf(tb_amount.getText()));
-                add.setString(7, tb_nationality.getText());
-                int row = add.executeUpdate();
-                if (row > 0) {
-                    JOptionPane.showMessageDialog(this, "Ticket added");
-                    connection.commit(); // Commit transaction
-                    displayBooking();
-                    clear();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                try {
-                    connection.rollback(); // Rollback transaction
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            } finally {
-                try {
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }*/
-        }
+
+
 
 
     private void book_buttonActionPerformed(java.awt.event.ActionEvent evt) {

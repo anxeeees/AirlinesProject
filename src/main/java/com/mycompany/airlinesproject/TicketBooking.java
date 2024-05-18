@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.airlinesproject;
-
+import java.awt.event.ActionListener;
 import com.mycompany.airlinesproject.entities.Booking;
 import com.mycompany.airlinesproject.entities.Cancellation;
 import com.mycompany.airlinesproject.entities.Flight;
@@ -14,6 +14,8 @@ import com.mycompany.airlinesproject.ropositories.FlightRepository;
 import com.mycompany.airlinesproject.ropositories.PassengerRepository;
 import org.apache.commons.dbutils.DbUtils;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +55,6 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_passport.setEditable(false);
         tb_gender.setEditable(false);
     }
-
 
 
     /**
@@ -138,7 +139,7 @@ public class TicketBooking extends javax.swing.JFrame {
         jLabel9.setText("SkyWing Airlines");
 
         booking_table.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
                         {null, null, null, null},
                         {null, null, null, null},
                         {null, null, null, null},
@@ -148,7 +149,7 @@ public class TicketBooking extends javax.swing.JFrame {
                         {null, null, null, null},
                         {null, null, null, null}
                 },
-                new String [] {
+                new String[]{
                         "Title 1", "Title 2", "Title 3", "Title 4"
                 }
         ));
@@ -312,6 +313,7 @@ public class TicketBooking extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 reset_buttonMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 reset_buttonMouseEntered(evt);
             }
@@ -523,12 +525,10 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
-
-
     private void getFlight() {
-            List<Flight> flights = flightRepository.getFlights();
-            for (Flight flight : flights) {
-                tb_flight_code.addItem(String.valueOf(flight.getCode()));
+        List<Flight> flights = flightRepository.getFlights();
+        for (Flight flight : flights) {
+            tb_flight_code.addItem(String.valueOf(flight.getCode()));
         }
     }
 
@@ -567,17 +567,19 @@ public class TicketBooking extends javax.swing.JFrame {
         clear();
     }
 
+
+
     private void getPassenger() {
         List<Passenger> passengers = passengerRepository.getPassengers();
         for (Passenger passenger : passengers) {
             int passId = Math.toIntExact(passenger.getPassengerId());
             tb_pass_id.addItem(String.valueOf(passId));
-                tb_name.setText(passenger.getName());
-                tb_gender.setText(passenger.getGender());
-                tb_passport.setText(passenger.getPassport());
-                tb_nationality.setText(passenger.getNationality());
-            }
+            tb_name.setText(passenger.getName());
+            tb_gender.setText(passenger.getGender());
+            tb_passport.setText(passenger.getPassport());
+            tb_nationality.setText(passenger.getNationality());
         }
+    }
 
 
     private void displayBooking() {
@@ -594,7 +596,7 @@ public class TicketBooking extends javax.swing.JFrame {
         tableHeaders.add("Amount");
         tableHeaders.add("Nationality");
 
-        for(Booking booking : bookings) {
+        for (Booking booking : bookings) {
 
             Vector<Object> oneRow = new Vector<Object>();
             oneRow.add(booking.getTicketId());
@@ -610,13 +612,6 @@ public class TicketBooking extends javax.swing.JFrame {
 
     }
 
-    //Long ticket_id = 0L;
-    private void countFlights() {
-
-      //ticket_id++;
-    }
-
-
 
     private void clear() {
         tb_flight_code.setSelectedIndex(-1);
@@ -628,15 +623,6 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
-    // iterace
-    Long start_id = 0L;
-    Long new_id = start_id++;
-
-    private void updateId() {
-       new_id =  start_id++;;
-    }
-
-
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {
 
 
@@ -644,9 +630,10 @@ public class TicketBooking extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
             try {
+                Long new_id = bookingRepository.getNextTicketId();
+                //bookingRepository.getNextTicketId();
                 Booking booking = new Booking(new_id, tb_name.getText(), Objects.requireNonNull(tb_flight_code.getSelectedItem()).toString(), tb_gender.getText(), tb_passport.getText(), Integer.valueOf(tb_amount.getText()), tb_nationality.getText());
                 bookingRepository.saveBooking(booking);
-                updateId();
                 JOptionPane.showMessageDialog(this, "Booking added");
                 displayBooking();
                 clear();
@@ -655,9 +642,6 @@ public class TicketBooking extends javax.swing.JFrame {
             }
         }
     }
-
-
-
 
 
     private void book_buttonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -669,8 +653,19 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
     private void tb_pass_idActionPerformed(java.awt.event.ActionEvent evt) {
-        getPassData();
+        getPassenger();
     }
+
+   /* tb_pass_id.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Call getPassenger method when a new index is selected
+            getPassenger();
+        }
+    });*/
+
+
+
 
     private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {
 

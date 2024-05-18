@@ -53,6 +53,18 @@ public class BookingRepository {
         Query query = session.createQuery("from Booking");
         List<Booking> bookings = query.list();
         return bookings;
-
     }
+
+    public Long getNextTicketId() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query<Long> query = session.createQuery("select max(ticketId) from Booking", Long.class);
+        Long maxTicketId = query.uniqueResult();
+        session.getTransaction().commit();
+        session.close();
+        return maxTicketId != null ? maxTicketId + 1 : 1L;
+    }
+
+
+
 }

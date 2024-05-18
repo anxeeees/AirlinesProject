@@ -54,4 +54,14 @@ public class CancellationRepository {
         return cancellations;
 
     }
+
+    public Long getNextCancId() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query<Long> query = session.createQuery("select max(cancellationId) from Cancellation ", Long.class);
+        Long maxCancId = query.uniqueResult();
+        session.getTransaction().commit();
+        session.close();
+        return maxCancId != null ? maxCancId + 1 : 1L;
+    }
 }

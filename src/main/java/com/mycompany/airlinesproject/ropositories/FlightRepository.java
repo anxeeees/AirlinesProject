@@ -50,11 +50,6 @@ public class FlightRepository {
 
     }
 
-//    public void deleteFlight(String code){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        Flight flight = session.
-//    }
 
     public List<Flight> getFlights(){
         Session session = sessionFactory.openSession();

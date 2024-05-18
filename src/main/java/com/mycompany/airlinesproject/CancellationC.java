@@ -4,8 +4,11 @@
  */
 package com.mycompany.airlinesproject;
 
+import com.mycompany.airlinesproject.entities.Booking;
 import com.mycompany.airlinesproject.entities.Cancellation;
 import com.mycompany.airlinesproject.entities.Flight;
+import com.mycompany.airlinesproject.entities.Passenger;
+import com.mycompany.airlinesproject.ropositories.BookingRepository;
 import com.mycompany.airlinesproject.ropositories.CancellationRepository;
 import com.mycompany.airlinesproject.ropositories.FlightRepository;
 import com.mycompany.airlinesproject.ropositories.PassengerRepository;
@@ -24,6 +27,8 @@ import javax.swing.table.DefaultTableModel;
 public class CancellationC extends javax.swing.JFrame {
     private CancellationRepository cancellationRepository;
 
+    private BookingRepository bookingRepository;
+
 
     /**
      * Creates new form Cancelation
@@ -31,6 +36,7 @@ public class CancellationC extends javax.swing.JFrame {
     public CancellationC() {
         initComponents();
         cancellationRepository = new CancellationRepository();
+        bookingRepository = new BookingRepository();
         getTicket();
         can_flight_code.setEditable(false);
         displayCan();
@@ -365,58 +371,20 @@ public class CancellationC extends javax.swing.JFrame {
     }
 
     private void can_ticket_idActionPerformed(java.awt.event.ActionEvent evt) {
-        getFlightCode();
+       // getFlightCode();
     }
 
     private void cancel_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (can_flight_code.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            Cancellation cancellation = new Cancellation(Long.parseLong(can_ticket_id.getSelectedItem().toString()),can_flight_code.getText(),can_flight_date.getDate());
+            Long new_cancid = cancellationRepository.getNextCancId();
+            Cancellation cancellation = new Cancellation(new_cancid, can_ticket_id.toString(), can_flight_code.getText(), can_flight_date.getDate());
             cancellationRepository.saveCancellation(cancellation);
             JOptionPane.showMessageDialog(this, "Cancellation added");
-            cancel();
+            //cancel();
             displayCan();
             getTicket();
-            /*try {
-                countCancellation();
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-                connection.setAutoCommit(false); // Začátek transakce
-
-                // Vložení záznamu do tabulky cancellation
-                try (PreparedStatement add = connection.prepareStatement("INSERT INTO cancellation VALUES (?, ?, ?, ?)")) {
-                    add.setInt(1, cancel_id);
-                    add.setInt(2, Integer.parseInt(can_ticket_id.getSelectedItem().toString()));
-                    add.setString(3, can_flight_code.getText());
-                    add.setString(4, can_flight_date.getDate().toString());
-                    int row = add.executeUpdate();
-                    if (row > 0) {
-                        JOptionPane.showMessageDialog(this, "Ticket cancelled");
-                    }
-                }
-
-                connection.commit(); // Potvrzení transakce
-                cancel();
-                displayCan();
-                getTicket();
-            } catch (SQLException e) {
-                try {
-                    if (connection != null) {
-                        connection.rollback(); // Rollback v případě chyby
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace(); // logging
-                }
-                JOptionPane.showMessageDialog(this, e.getMessage());
-            } finally {
-                try {
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }*/
         }
     }
 
@@ -469,45 +437,13 @@ public class CancellationC extends javax.swing.JFrame {
         for(Cancellation cancellation : cancellations) {
 
             Vector<Object> oneRow = new Vector<Object>();
-            oneRow.add(cancellation.getCode());
+            oneRow.add(cancellation.getCancellationId());
             oneRow.add(cancellation.getTicketId());
             oneRow.add(cancellation.getCode());
             oneRow.add(cancellation.getCancellationDate());
             tableData.add(oneRow);
         }
         cancellation_table.setModel(new DefaultTableModel(tableData, tableHeaders));
-        /*try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb","root","ester");
-
-            st = connection.createStatement();
-
-            rs = st.executeQuery("SELECT * FROM cancellation");
-
-            ResultSetMetaData metaData = rs.getMetaData();
-
-
-            int columnCount = metaData.getColumnCount();
-
-
-            DefaultTableModel model = new DefaultTableModel();
-
-
-            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                model.addColumn(metaData.getColumnName(columnIndex));
-            }
-
-            while (rs.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = rs.getObject(i + 1);
-                }
-                model.addRow(rowData);
-            }
-
-            cancellation_table.setModel(model);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
     int cancel_id = 0;
@@ -523,20 +459,16 @@ public class CancellationC extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    private void getTicket() {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-            st = connection.createStatement();
-            String query = "select * from booking";
-            rs = st.executeQuery(query);
-            while (rs.next()) {
-                int ticket = rs.getInt("ticket_id");
-                can_ticket_id.addItem(String.valueOf(ticket));
-            }
-        } catch (Exception e) {
 
+    private void getTicket() {
+        List<Booking> bookings = bookingRepository.getBookings();
+        for (Booking booking : bookings) {
+            int ticket = Math.toIntExact(booking.getTicketId());
+            can_ticket_id.addItem(String.valueOf(ticket));
+            can_flight_code.setText(booking.getCode());
         }
     }
+
 
     public void getFlightCode() {
         String query = "select * from booking where ticket_id=" + can_ticket_id.getSelectedItem().toString();

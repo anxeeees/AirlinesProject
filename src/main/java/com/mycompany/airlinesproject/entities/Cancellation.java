@@ -11,7 +11,7 @@ public class Cancellation {
     private Long cancellationId;
 
     @Column(name = "ticket_id")
-    private Long ticketId;
+    private String ticketId;
 
     @Column(name = "code")
     private String code;
@@ -24,10 +24,11 @@ public class Cancellation {
     public Cancellation() {
     }
 
-    public Cancellation(Long ticketId, String code, Date cancellationDate) {
+    public Cancellation(Long canc_id,String ticketId, String code, Date cancellationDate) {
         this.ticketId = ticketId;
         this.code = code;
         this.cancellationDate = cancellationDate;
+        this.cancellationId = canc_id;
     }
 
     // Getters and setters
@@ -40,11 +41,11 @@ public class Cancellation {
         this.cancellationId = cancellationId;
     }
 
-    public Long getTicketId() {
+    public String getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(Long ticketId) {
+    public void setTicketId(String ticketId) {
         this.ticketId = ticketId;
     }
 

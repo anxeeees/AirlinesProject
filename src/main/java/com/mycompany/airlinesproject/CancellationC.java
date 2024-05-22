@@ -378,8 +378,8 @@ public class CancellationC extends javax.swing.JFrame {
         if (can_flight_code.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            Long new_cancid = cancellationRepository.getNextCancId();
-            Cancellation cancellation = new Cancellation(new_cancid, can_ticket_id.toString(), can_flight_code.getText(), can_flight_date.getDate());
+            Long new_cancid = 0L;
+            Cancellation cancellation = new Cancellation(can_ticket_id.toString(), can_flight_code.getText(), can_flight_date.getDate());
             cancellationRepository.saveCancellation(cancellation);
             JOptionPane.showMessageDialog(this, "Cancellation added");
             //cancel();

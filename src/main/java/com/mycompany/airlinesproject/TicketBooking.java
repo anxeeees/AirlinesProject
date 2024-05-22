@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.airlinesproject;
+
 import java.awt.event.ActionListener;
+
 import com.mycompany.airlinesproject.entities.Booking;
 import com.mycompany.airlinesproject.entities.Cancellation;
 import com.mycompany.airlinesproject.entities.Flight;
@@ -568,7 +570,6 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
-
     private void getPassenger() {
         List<Passenger> passengers = passengerRepository.getPassengers();
         for (Passenger passenger : passengers) {
@@ -578,6 +579,22 @@ public class TicketBooking extends javax.swing.JFrame {
             tb_gender.setText(passenger.getGender());
             tb_passport.setText(passenger.getPassport());
             tb_nationality.setText(passenger.getNationality());
+        }
+        tb_pass_id.setSelectedIndex(0);
+    }
+
+
+    private void getPassengerById(Long id) {
+        List<Passenger> passengers = passengerRepository.getPassengers();
+        for (Passenger passenger : passengers) {
+            if (id == passenger.getPassengerId()) {
+                tb_name.setText(passenger.getName());
+                tb_gender.setText(passenger.getGender());
+                tb_passport.setText(passenger.getPassport());
+                tb_nationality.setText(passenger.getNationality());
+                break;
+            }
+
         }
     }
 
@@ -653,7 +670,11 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
     private void tb_pass_idActionPerformed(java.awt.event.ActionEvent evt) {
-        getPassenger();
+        Long id = Long.parseLong ((String)tb_pass_id.getSelectedItem());
+        getPassengerById(id);
+
+        displayBooking();
+        getFlight();
     }
 
    /* tb_pass_id.addActionListener(new ActionListener() {
@@ -663,8 +684,6 @@ public class TicketBooking extends javax.swing.JFrame {
             getPassenger();
         }
     });*/
-
-
 
 
     private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {

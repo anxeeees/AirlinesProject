@@ -21,7 +21,14 @@ public class Cancellation {
 
     // Constructors, getters, and setters
 
+    public Cancellation(String ticketId, String code, Date cancellationDate) {
+        this.ticketId = ticketId;
+        this.code = code;
+        this.cancellationDate = cancellationDate;
+    }
+
     public Cancellation() {
+
     }
 
     public Cancellation(Long canc_id,String ticketId, String code, Date cancellationDate) {

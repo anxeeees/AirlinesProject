@@ -1,6 +1,7 @@
 package com.mycompany.airlinesproject.ropositories;
 
 import com.mycompany.airlinesproject.entities.Booking;
+import com.mycompany.airlinesproject.entities.Flight;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -45,6 +46,7 @@ public class CancellationRepository {
         session.getTransaction().commit();
         session.close();
     }
+
 
     public List<Cancellation> getCancellations(){
         Session session = sessionFactory.openSession();

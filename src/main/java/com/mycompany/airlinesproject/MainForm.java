@@ -102,15 +102,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        canc_button.setText("Cancellation");
-        canc_button.setFillOver(new java.awt.Color(204, 204, 204));
-        canc_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        canc_button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                canc_buttonMouseClicked(evt);
-            }
-        });
-
         flights_button.setText("Flights");
         flights_button.setFillOver(new java.awt.Color(204, 204, 204));
         flights_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -180,7 +171,6 @@ public class MainForm extends javax.swing.JFrame {
 
     private void tickets_buttonMouseClicked(java.awt.event.MouseEvent evt) {
 
-        // TODO add your handling code here:
         new TicketBooking().setVisible(true);
         this.dispose();
         
@@ -188,10 +178,7 @@ public class MainForm extends javax.swing.JFrame {
 
     }
 
-    private void canc_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        new CancellationC().setVisible(true);
-        this.dispose();
-    }
+
 
     private void back_button3MouseClicked(java.awt.event.MouseEvent evt) {
 

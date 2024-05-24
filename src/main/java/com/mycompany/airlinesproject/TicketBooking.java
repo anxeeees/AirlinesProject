@@ -4,31 +4,20 @@
  */
 package com.mycompany.airlinesproject;
 
-import java.awt.event.ActionListener;
-
 import com.mycompany.airlinesproject.entities.Booking;
-import com.mycompany.airlinesproject.entities.Cancellation;
 import com.mycompany.airlinesproject.entities.Flight;
 import com.mycompany.airlinesproject.entities.Passenger;
 import com.mycompany.airlinesproject.ropositories.BookingRepository;
-import com.mycompany.airlinesproject.ropositories.CancellationRepository;
 import com.mycompany.airlinesproject.ropositories.FlightRepository;
 import com.mycompany.airlinesproject.ropositories.PassengerRepository;
-import org.apache.commons.dbutils.DbUtils;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicLong;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
-
-import static org.apache.commons.dbutils.DbUtils.*;
 
 
 /**
@@ -50,8 +39,8 @@ public class TicketBooking extends javax.swing.JFrame {
         passengerRepository = new PassengerRepository();
         flightRepository = new FlightRepository();
         getPassenger();
-        getFlight();
         displayBooking();
+        getFlight();
         tb_nationality.setEditable(false);
         tb_name.setEditable(false);
         tb_passport.setEditable(false);
@@ -534,26 +523,6 @@ public class TicketBooking extends javax.swing.JFrame {
         }
     }
 
-    public void getPassData() {
-       /* String query = "select * from passengers where pass_id=" + tb_pass_id.getSelectedItem().toString();
-        Statement statement;
-        ResultSet resultSet;
-
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/airlinedb", "root", "ester");
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
-            if (resultSet.next()) {
-                tb_name.setText(resultSet.getString("name"));
-                tb_gender.setText(resultSet.getString("gender"));
-                tb_passport.setText(resultSet.getString("passport"));
-                tb_nationality.setText(resultSet.getString("nationality"));
-
-            }
-        } catch (Exception e) {
-*/
-
-    }
 
 
     private void tb_nameActionPerformed(java.awt.event.ActionEvent evt) {
@@ -648,7 +617,6 @@ public class TicketBooking extends javax.swing.JFrame {
         } else {
             try {
                 Long new_id = bookingRepository.getNextTicketId();
-                //bookingRepository.getNextTicketId();
                 Booking booking = new Booking(new_id, tb_name.getText(), Objects.requireNonNull(tb_flight_code.getSelectedItem()).toString(), tb_gender.getText(), tb_passport.getText(), Integer.valueOf(tb_amount.getText()), tb_nationality.getText());
                 bookingRepository.saveBooking(booking);
                 JOptionPane.showMessageDialog(this, "Booking added");
@@ -672,18 +640,8 @@ public class TicketBooking extends javax.swing.JFrame {
     private void tb_pass_idActionPerformed(java.awt.event.ActionEvent evt) {
         Long id = Long.parseLong ((String)tb_pass_id.getSelectedItem());
         getPassengerById(id);
-
-        displayBooking();
-        getFlight();
     }
 
-   /* tb_pass_id.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Call getPassenger method when a new index is selected
-            getPassenger();
-        }
-    });*/
 
 
     private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {

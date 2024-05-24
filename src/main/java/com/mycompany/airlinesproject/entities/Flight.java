@@ -2,6 +2,7 @@ package com.mycompany.airlinesproject.entities;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "flights")
@@ -26,6 +27,11 @@ public class Flight {
 
     @Column(name = "seats")
     private int seats;
+
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+    private List<Passenger> passengers;
+
+
 
 
     public Flight() {

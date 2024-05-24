@@ -7,9 +7,9 @@ package com.mycompany.airlinesproject;
 import com.mycompany.airlinesproject.entities.Booking;
 import com.mycompany.airlinesproject.entities.Flight;
 import com.mycompany.airlinesproject.entities.Passenger;
-import com.mycompany.airlinesproject.ropositories.BookingRepository;
-import com.mycompany.airlinesproject.ropositories.FlightRepository;
-import com.mycompany.airlinesproject.ropositories.PassengerRepository;
+import com.mycompany.airlinesproject.repositories.BookingRepository;
+import com.mycompany.airlinesproject.repositories.FlightRepository;
+import com.mycompany.airlinesproject.repositories.PassengerRepository;
 
 import java.util.List;
 import java.util.Objects;

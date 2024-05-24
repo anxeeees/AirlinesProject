@@ -1,31 +1,27 @@
-package com.mycompany.airlinesproject.ropositories;
+package com.mycompany.airlinesproject.repositories;
 
-import com.mycompany.airlinesproject.entities.Flight;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import com.mycompany.airlinesproject.entities.Passenger;
 import org.hibernate.query.Query;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
-public class FlightRepository {
-
+public class PassengerRepository {
     private SessionFactory sessionFactory;
 
-    public FlightRepository()  {
+    public PassengerRepository() {
         setUp();
     }
 
-    private void setUp()  {
+    private void setUp() {
         try {
             if (sessionFactory == null) {
-                StandardServiceRegistry standardRegistry
-                        = new StandardServiceRegistryBuilder()
+                StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
                         .configure()
                         .build();
 
@@ -40,51 +36,48 @@ public class FlightRepository {
             throw new ExceptionInInitializerError(ex);
         }
     }
-    public void saveFlight(Flight flight) {
 
+    public void savePassenger(Passenger passenger) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.persist(flight);
+        session.persist(passenger);
         session.getTransaction().commit();
         session.close();
+    }
+
+    public List<Passenger> getPassengers() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Passenger");
+        List<Passenger> passengers = query.list();
+        return passengers;
 
     }
 
-
-    public List<Flight> getFlights(){
+    public void deletePassenger(String passengerId) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from Flight");
-        List<Flight> flights = query.list();
-        return flights;
-
-    }
-
-    public void deleteFlight(String code) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query q = session.createQuery("delete from Flight  where code =:code");
-        q.setParameter("code", code);
+        Query q = session.createQuery("delete from Passenger  where passengerId =:passengerId");
+        q.setParameter("passengerId", passengerId);
         q.executeUpdate();
     }
 
-    public void updateFlight(String code, String source, String destination, Date date, String seats){
+    public void updatePassenger(String passengerId, String name, String nationality, String gender, String passport, String address, String phone) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from Flight where code =:code");
-        query.setParameter("code", code);
-        Flight flight = (Flight) query.getSingleResult();
-        flight.setSource(source);
-        flight.setDestination(destination);
-        flight.setDate(date);
-        flight.setSeats(Integer.parseInt(seats));
-        session.persist(flight);
+        Query query = session.createQuery("from Passenger where passengerId =:passengerId");
+        query.setParameter("passengerId", passengerId);
+        Passenger passenger = (Passenger) query.getSingleResult();
+        passenger.setName(name);
+        passenger.setNationality(nationality);
+        passenger.setGender(gender);
+        passenger.setPassport(passport);
+        passenger.setAddress(address);
+        passenger.setPhone(phone);
+        session.persist(passenger);
         session.getTransaction().commit();
         session.close();
-
-
     }
-
 
 
 }

@@ -1,7 +1,6 @@
-package com.mycompany.airlinesproject.ropositories;
+package com.mycompany.airlinesproject.repositories;
 
-import com.mycompany.airlinesproject.entities.Booking;
-import com.mycompany.airlinesproject.entities.Passenger;
+import com.mycompany.airlinesproject.entities.Flight;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -10,14 +9,17 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
+import java.util.Date;
 import java.util.List;
 
+public class FlightRepository {
 
-public class BookingRepository {
     private SessionFactory sessionFactory;
-    public BookingRepository()  {
+
+    public FlightRepository()  {
         setUp();
     }
+
     private void setUp()  {
         try {
             if (sessionFactory == null) {
@@ -37,32 +39,49 @@ public class BookingRepository {
             throw new ExceptionInInitializerError(ex);
         }
     }
+    public void saveFlight(Flight flight) {
 
-    public void saveBooking(Booking booking) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.persist(booking);
+        session.persist(flight);
         session.getTransaction().commit();
         session.close();
 
     }
 
-    public List<Booking> getBookings(){
+
+    public List<Flight> getFlights(){
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from Booking");
-        List<Booking> bookings = query.list();
-        return bookings;
+        Query query = session.createQuery("from Flight");
+        List<Flight> flights = query.list();
+        return flights;
+
     }
 
-    public Long getNextTicketId() {
+    public void deleteFlight(String code) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query<Long> query = session.createQuery("select max(ticketId) from Booking", Long.class);
-        Long maxTicketId = query.uniqueResult();
+        Query q = session.createQuery("delete from Flight  where code =:code");
+        q.setParameter("code", code);
+        q.executeUpdate();
+    }
+
+    public void updateFlight(String code, String source, String destination, Date date, String seats){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Flight where code =:code");
+        query.setParameter("code", code);
+        Flight flight = (Flight) query.getSingleResult();
+        flight.setSource(source);
+        flight.setDestination(destination);
+        flight.setDate(date);
+        flight.setSeats(Integer.parseInt(seats));
+        session.persist(flight);
         session.getTransaction().commit();
         session.close();
-        return maxTicketId != null ? maxTicketId + 1 : 1L;
+
+
     }
 
 

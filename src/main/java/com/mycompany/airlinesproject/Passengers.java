@@ -6,12 +6,9 @@ package com.mycompany.airlinesproject;
 
 
 
-import com.mycompany.airlinesproject.entities.Flight;
 import com.mycompany.airlinesproject.entities.Passenger;
-import com.mycompany.airlinesproject.ropositories.FlightRepository;
-import com.mycompany.airlinesproject.ropositories.PassengerRepository;
+import com.mycompany.airlinesproject.repositories.PassengerRepository;
 
-import java.sql.*;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;

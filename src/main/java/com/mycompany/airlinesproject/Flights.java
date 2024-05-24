@@ -2,11 +2,8 @@
 package com.mycompany.airlinesproject;
 
 import com.mycompany.airlinesproject.entities.Flight;
-import com.mycompany.airlinesproject.ropositories.FlightRepository;
+import com.mycompany.airlinesproject.repositories.FlightRepository;
 
-import java.sql.*;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.Date;
 import javax.swing.JOptionPane;

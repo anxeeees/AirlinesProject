@@ -28,11 +28,16 @@ public class Flight {
     @Column(name = "seats")
     private int seats;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
-    private List<Passenger> passengers;
+    @OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 
+    public List<Booking> getBookings() {
+        return bookings;
+    }
 
-
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
 
     public Flight() {
     }

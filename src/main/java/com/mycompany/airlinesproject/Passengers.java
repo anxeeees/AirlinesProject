@@ -33,6 +33,126 @@ public class Passengers extends javax.swing.JFrame {
         passengerRepository = new PassengerRepository();
         displayPassengers();
     }
+
+    private void displayPassengers() {
+        List<Passenger> passengers = passengerRepository.getPassengers();
+
+        Vector<String> tableHeaders = new Vector<String>();
+        Vector tableData = new Vector();
+        tableHeaders.add("PID");
+        tableHeaders.add("Name");
+        tableHeaders.add("Nationality");
+        tableHeaders.add("Gender");
+        tableHeaders.add("Passport");
+        tableHeaders.add("Address");
+        tableHeaders.add("Phone");
+        tableHeaders.add("FK_FID");
+
+        for(Passenger passenger : passengers) {
+
+            Vector<Object> oneRow = new Vector<Object>();
+            oneRow.add(passenger.getPassengerId());
+            oneRow.add(passenger.getName());
+            oneRow.add(passenger.getNationality());
+            oneRow.add(passenger.getGender());
+            oneRow.add(passenger.getPassport());
+            oneRow.add(passenger.getAddress());
+            oneRow.add(passenger.getPhone());
+            tableData.add(oneRow);
+        }
+        pass_table.setModel(new DefaultTableModel(tableData, tableHeaders));
+
+
+    }
+
+
+    private void clear() {
+        pass_name.setText("");
+        pass_pnum.setText("");
+        pass_address.setText("");
+        pass_phone.setText("");
+        pass_nat.setSelectedIndex(0);
+        pass_gender.setSelectedIndex(0);
+    }
+
+
+    int key = 0;
+    private void pass_tableMouseClicked(java.awt.event.MouseEvent evt) {
+        DefaultTableModel model = (DefaultTableModel)pass_table.getModel();
+        int myIndex = pass_table.getSelectedRow();
+        key = Integer.valueOf(model.getValueAt(myIndex,0).toString());
+        pass_name.setText(model.getValueAt(myIndex,1).toString());
+        pass_nat.setSelectedItem(model.getValueAt(myIndex,2).toString());
+        pass_gender.setSelectedItem(model.getValueAt(myIndex,3).toString());
+        pass_pnum.setText(model.getValueAt(myIndex,4).toString());
+        pass_address.setText(model.getValueAt(myIndex,5).toString());
+        pass_phone.setText(model.getValueAt(myIndex,6).toString());
+    }
+
+    private void pass_nameActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+
+    private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
+        new MainForm().setVisible(true);
+        this.dispose();
+
+    }
+
+    private void del_buttonMouseClicked(java.awt.event.MouseEvent evt) {
+        if (key == 0) {
+            JOptionPane.showMessageDialog(this, "Select a passenger");
+        } else {
+            passengerRepository.deletePassenger(String.valueOf(key));
+            JOptionPane.showMessageDialog(this, "Passenger deleted");
+            displayPassengers();
+            clear();
+        }
+    }
+
+
+    private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
+        if (key == 0) {
+            JOptionPane.showMessageDialog(this, "Select a passenger");
+        } else if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
+                || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Missing information"); {
+            }
+        }else {
+            passengerRepository.updatePassenger(String.valueOf(key),pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(), pass_address.getText(),pass_phone.getText());
+            JOptionPane.showMessageDialog(this, "Passenger updated");
+            displayPassengers();
+            clear();
+        }
+    }
+
+    private void save_buttonMouseClicked(java.awt.event.MouseEvent evt) {
+        if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
+                || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Missing information");
+        } else {
+            Passenger passenger = new Passenger(pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(),pass_address.getText(),pass_phone.getText());
+            passengerRepository.savePassenger(passenger);
+            JOptionPane.showMessageDialog(this, "Passenger added");
+            displayPassengers();
+            clear();
+        }
+    }
+
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            }
+            Passengers passenger = new Passengers();
+            passenger.setVisible(true);
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,8 +160,6 @@ public class Passengers extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     private void initComponents() {
-
-
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -489,9 +607,7 @@ public class Passengers extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 edit_buttonMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                edit_buttonMouseEntered(evt);
-            }
+
         });
 
         save_button.setText("Save");
@@ -502,11 +618,7 @@ public class Passengers extends javax.swing.JFrame {
                 save_buttonMouseClicked(evt);
             }
         });
-        save_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                save_buttonActionPerformed(evt);
-            }
-        });
+
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -660,133 +772,6 @@ public class Passengers extends javax.swing.JFrame {
 
         pack();
     }
-
-
-    private void displayPassengers() {
-        List<Passenger> passengers = passengerRepository.getPassengers();
-
-        Vector<String> tableHeaders = new Vector<String>();
-        Vector tableData = new Vector();
-        tableHeaders.add("PID");
-        tableHeaders.add("Name");
-        tableHeaders.add("Nationality");
-        tableHeaders.add("Gender");
-        tableHeaders.add("Passport");
-        tableHeaders.add("Address");
-        tableHeaders.add("Phone");
-
-        for(Passenger passenger : passengers) {
-
-            Vector<Object> oneRow = new Vector<Object>();
-            oneRow.add(passenger.getPassengerId());
-            oneRow.add(passenger.getName());
-            oneRow.add(passenger.getNationality());
-            oneRow.add(passenger.getGender());
-            oneRow.add(passenger.getPassport());
-            oneRow.add(passenger.getAddress());
-            oneRow.add(passenger.getPhone());
-            tableData.add(oneRow);
-        }
-        pass_table.setModel(new DefaultTableModel(tableData, tableHeaders));
-
-
-    }
-
-
-    private void clear() {
-        pass_name.setText("");
-        pass_pnum.setText("");
-        pass_address.setText("");
-        pass_phone.setText("");
-        pass_nat.setSelectedIndex(0);
-        pass_gender.setSelectedIndex(0);
-    }
-
-
-    int key = 0;
-    private void pass_tableMouseClicked(java.awt.event.MouseEvent evt) {
-        DefaultTableModel model = (DefaultTableModel)pass_table.getModel();
-        int myIndex = pass_table.getSelectedRow();
-        key = Integer.valueOf(model.getValueAt(myIndex,0).toString());
-        pass_name.setText(model.getValueAt(myIndex,1).toString());
-        pass_nat.setSelectedItem(model.getValueAt(myIndex,2).toString());
-        pass_gender.setSelectedItem(model.getValueAt(myIndex,3).toString());
-        pass_pnum.setText(model.getValueAt(myIndex,4).toString());
-        pass_address.setText(model.getValueAt(myIndex,5).toString());
-        pass_phone.setText(model.getValueAt(myIndex,6).toString());
-    }
-
-    private void pass_nameActionPerformed(java.awt.event.ActionEvent evt) {
-    }
-
-    private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        new MainForm().setVisible(true);
-        this.dispose();
-
-    }
-
-    private void del_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (key == 0) {
-            JOptionPane.showMessageDialog(this, "Select a passenger");
-        } else {
-            passengerRepository.deletePassenger(String.valueOf(key));
-            JOptionPane.showMessageDialog(this, "Passenger deleted");
-            displayPassengers();
-           clear();
-        }
-    }
-
-
-    private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (key == 0) {
-            JOptionPane.showMessageDialog(this, "Select a passenger");
-        } else if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
-                || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Missing information"); {
-            }
-        }else {
-            passengerRepository.updatePassenger(String.valueOf(key),pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(), pass_address.getText(),pass_phone.getText());
-            JOptionPane.showMessageDialog(this, "Passenger updated");
-            displayPassengers();
-            clear();
-        }
-    }
-
-    private void save_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
-                || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Missing information");
-        } else {
-            Passenger passenger = new Passenger(pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(),pass_address.getText(),pass_phone.getText());
-            passengerRepository.savePassenger(passenger);
-            JOptionPane.showMessageDialog(this, "Passenger added");
-            displayPassengers();
-            clear();
-        }
-    }
-
-    private void save_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-    }
-
-    private void edit_buttonMouseEntered(java.awt.event.MouseEvent evt) {
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            }
-            Passengers passenger = new Passengers();
-            passenger.setVisible(true);
-        });
-    }
-
-
 
     private com.mycompany.airlinesproject.RoundedButton back_button;
     private com.mycompany.airlinesproject.RoundedButton del_button;

@@ -40,7 +40,8 @@ public class BookingRepository {
     public void saveBooking(Booking booking) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.persist(booking);
+        //session.persist(booking);
+        session.merge(booking);
         session.getTransaction().commit();
         session.close();
 
@@ -54,15 +55,6 @@ public class BookingRepository {
         return bookings;
     }
 
-    public Long getNextTicketId() {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query<Long> query = session.createQuery("select max(ticketId) from Booking", Long.class);
-        Long maxTicketId = query.uniqueResult();
-        session.getTransaction().commit();
-        session.close();
-        return maxTicketId != null ? maxTicketId + 1 : 1L;
-    }
 
 
 

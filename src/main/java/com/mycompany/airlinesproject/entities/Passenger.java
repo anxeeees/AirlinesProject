@@ -29,9 +29,7 @@ public class Passenger {
     @Column(name = "phone")
     private String phone;
 
-    @ManyToOne
-    private Flight flight;
-    // Constructors, getters, and setters
+
 
     public Passenger() {
     }
@@ -45,7 +43,6 @@ public class Passenger {
         this.phone = phone;
     }
 
-    // Getters and setters
 
     public Long getPassengerId() {
         return passengerId;

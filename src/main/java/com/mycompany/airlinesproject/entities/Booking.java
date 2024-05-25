@@ -1,4 +1,5 @@
 package com.mycompany.airlinesproject.entities;
+
 import jakarta.persistence.*;
 
 
@@ -10,9 +11,6 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "booking_id")
     private Long bookingId;
-
-    @Column(name = "ticket_id")
-    private Long ticketId;
 
     @Column(name = "pass_name")
     private String passengerName;
@@ -32,20 +30,45 @@ public class Booking {
     @Column(name = "nationality")
     private String nationality;
 
-    // Constructors, getters, and setters
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_flight_id")
+    private Flight flights;
 
-    public Booking() {
+
+    public Flight getFlights() {
+        return flights;
     }
 
-    public Booking(Long ticketId, String passengerName, String code, String gender, String passport, double amount, String nationality) {
-        this.ticketId = ticketId;
+    public void setFlights(Flight flights) {
+        this.flights = flights;
+    }
+
+    // Constructors, getters, and setters
+
+
+    public Booking(String passengerName, String code, String gender, String passport, double amount, String nationality, Flight flights) {
         this.passengerName = passengerName;
         this.code = code;
         this.gender = gender;
         this.passport = passport;
         this.amount = amount;
         this.nationality = nationality;
+        this.flights = flights;
     }
+
+    public Booking(String passengerName, String code, String gender, String passport, double amount, String nationality) {
+        this.passengerName = passengerName;
+        this.code = code;
+        this.gender = gender;
+        this.passport = passport;
+        this.amount = amount;
+        this.nationality = nationality;
+
+    }
+
+    public Booking() {
+    }
+
 
     // Getters and setters
 
@@ -57,13 +80,6 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Long getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
-    }
 
     public String getPassengerName() {
         return passengerName;

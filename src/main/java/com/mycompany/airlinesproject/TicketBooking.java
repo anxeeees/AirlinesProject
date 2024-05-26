@@ -104,18 +104,17 @@ public class TicketBooking extends javax.swing.JFrame {
         tableHeaders.add("BookingID");
         tableHeaders.add("Name");
         tableHeaders.add("FlightCode");
-        tableHeaders.add("FlightID");
         tableHeaders.add("Gender");
         tableHeaders.add("Passport");
         tableHeaders.add("Amount");
         tableHeaders.add("Nationality");
+        tableHeaders.add("FlightID");
 
         for (Booking booking : bookings) {
             Vector<Object> oneRow = new Vector<Object>();
             oneRow.add(booking.getBookingId());
             oneRow.add(booking.getPassengerName());
             oneRow.add(booking.getCode());
-            oneRow.add(booking.getFlights().getFlightId());
             oneRow.add(booking.getGender());
             oneRow.add(booking.getPassport());
             oneRow.add(booking.getAmount());

@@ -28,7 +28,8 @@ public class Flight {
     @Column(name = "seats")
     private int seats;
 
-    @OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "flights",cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH })
     private List<Booking> bookings;
 
     public List<Booking> getBookings() {

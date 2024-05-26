@@ -46,7 +46,6 @@ public class Passengers extends javax.swing.JFrame {
         tableHeaders.add("Passport");
         tableHeaders.add("Address");
         tableHeaders.add("Phone");
-        tableHeaders.add("FK_FID");
 
         for(Passenger passenger : passengers) {
 

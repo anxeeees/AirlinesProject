@@ -2,7 +2,6 @@ package com.mycompany.airlinesproject.entities;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "booking")
 public class Booking {
@@ -30,30 +29,26 @@ public class Booking {
     @Column(name = "nationality")
     private String nationality;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "fk_flight_id")
-    private Flight flights;
+    private Flight flight;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_passenger_id")
+    private Passenger passenger;
 
-    public Flight getFlights() {
-        return flights;
+    public Booking() {
     }
 
-    public void setFlights(Flight flights) {
-        this.flights = flights;
-    }
-
-    // Constructors, getters, and setters
-
-
-    public Booking(String passengerName, String code, String gender, String passport, double amount, String nationality, Flight flights) {
+    public Booking(String passengerName, String code, String gender, String passport, double amount, String nationality, Flight flight, Passenger passenger) {
         this.passengerName = passengerName;
         this.code = code;
         this.gender = gender;
         this.passport = passport;
         this.amount = amount;
         this.nationality = nationality;
-        this.flights = flights;
+        this.flight = flight;
+        this.passenger = passenger;
     }
 
     public Booking(String passengerName, String code, String gender, String passport, double amount, String nationality) {
@@ -66,10 +61,6 @@ public class Booking {
 
     }
 
-    public Booking() {
-    }
-
-
     // Getters and setters
 
     public Long getBookingId() {
@@ -79,7 +70,6 @@ public class Booking {
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
     }
-
 
     public String getPassengerName() {
         return passengerName;
@@ -127,5 +117,21 @@ public class Booking {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public Passenger getPassenger() {
+        return passenger;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
     }
 }

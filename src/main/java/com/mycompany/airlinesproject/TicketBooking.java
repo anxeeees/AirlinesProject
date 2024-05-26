@@ -140,15 +140,23 @@ public class TicketBooking extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
             try {
+                String flightCode = tb_flight_code.getSelectedItem().toString();
+                String passengerId = tb_pass_id.getSelectedItem().toString();
+
+                Flight flight = flightRepository.getFlightByCode(flightCode);
+                Passenger passenger = passengerRepository.getPassengerById(passengerId);
+
                 String amountText = tb_amount.getText();
                 double amount = Double.parseDouble(amountText);
-                Booking booking = new Booking(tb_name.getText(), Objects.requireNonNull(tb_flight_code.getSelectedItem()).toString(), tb_gender.getText(), tb_passport.getText(), amount, tb_nationality.getText());
+
+                Booking booking = new Booking(tb_name.getText(), flightCode, tb_gender.getText(), tb_passport.getText(), amount, tb_nationality.getText(), flight, passenger);
                 bookingRepository.saveBooking(booking);
+
                 JOptionPane.showMessageDialog(this, "Booking added");
                 displayBooking();
                 clear();
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Invalid amount: " + tb_amount.getText()); // Zobrazit chybu pro neplatné číslo
+                JOptionPane.showMessageDialog(this, "Invalid amount: " + tb_amount.getText());
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error adding booking: " + e.getMessage());
             }

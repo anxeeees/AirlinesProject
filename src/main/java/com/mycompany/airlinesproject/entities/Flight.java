@@ -1,6 +1,7 @@
 package com.mycompany.airlinesproject.entities;
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,17 +29,8 @@ public class Flight {
     @Column(name = "seats")
     private int seats;
 
-    @OneToMany(mappedBy = "flights",cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-            CascadeType.REFRESH })
-    private List<Booking> bookings;
-
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
-    }
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+    private List<Booking> bookings = new ArrayList<>();
 
     public Flight() {
     }
@@ -51,12 +43,27 @@ public class Flight {
         this.seats = seats;
     }
 
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+        booking.setFlight(this);
+    }
+
+    // Getters and setters
+
     public Long getFlightId() {
         return flightId;
     }
 
     public void setFlightId(Long flightId) {
         this.flightId = flightId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getSource() {
@@ -91,11 +98,11 @@ public class Flight {
         this.seats = seats;
     }
 
-    public String getCode() {
-        return code;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

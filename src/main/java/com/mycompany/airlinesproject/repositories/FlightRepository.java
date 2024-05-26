@@ -84,7 +84,15 @@ public class FlightRepository {
 
     }
 
-
+    public Flight getFlightByCode(String code) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Query query = session.createQuery("from Flight where code = :code");
+            query.setParameter("code", code);
+            Flight flight = (Flight) query.uniqueResult();
+            return flight;
+        }
+    }
 
 
 }

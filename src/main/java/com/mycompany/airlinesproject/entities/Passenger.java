@@ -1,6 +1,8 @@
 package com.mycompany.airlinesproject.entities;
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "passenger")
@@ -29,7 +31,8 @@ public class Passenger {
     @Column(name = "phone")
     private String phone;
 
-
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL)
+    private List<Booking> bookings = new ArrayList<>();
 
     public Passenger() {
     }
@@ -43,6 +46,12 @@ public class Passenger {
         this.phone = phone;
     }
 
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+        booking.setPassenger(this);
+    }
+
+    // Getters and setters
 
     public Long getPassengerId() {
         return passengerId;
@@ -98,5 +107,13 @@ public class Passenger {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

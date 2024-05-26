@@ -79,5 +79,15 @@ public class PassengerRepository {
         session.close();
     }
 
+    public Passenger getPassengerById(String id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Query query = session.createQuery("from Passenger where passengerId = :passengerId");
+            query.setParameter("passengerId", id);
+            Passenger passenger = (Passenger) query.uniqueResult();
+            return passenger;
+        }
+    }
+
 
 }

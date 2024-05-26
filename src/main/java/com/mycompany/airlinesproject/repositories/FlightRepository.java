@@ -59,12 +59,19 @@ public class FlightRepository {
 
     }
 
-    public void deleteFlight(String code) {
+    public void deleteFlight(String flightId) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query q = session.createQuery("delete from Flight  where code =:code");
-        q.setParameter("code", code);
-        q.executeUpdate();
+
+        Query updateBookingsQuery = session.createQuery("update Booking set flight = null where flight.flightId = :flightId");
+        updateBookingsQuery.setParameter("flightId", flightId);
+        updateBookingsQuery.executeUpdate();
+
+        Query deleteFlightQuery = session.createQuery("delete from Flight where flightId = :flightId");
+        deleteFlightQuery.setParameter("flightId", flightId);
+        deleteFlightQuery.executeUpdate();
+
+        session.getTransaction().commit();
     }
 
     public void updateFlight(String code, String source, String destination, Date date, String seats){

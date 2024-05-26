@@ -29,12 +29,12 @@ public class Booking {
     @Column(name = "nationality")
     private String nationality;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_flight_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_passenger_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "passenger_id", nullable = false)
     private Passenger passenger;
 
     public Booking() {
@@ -51,15 +51,6 @@ public class Booking {
         this.passenger = passenger;
     }
 
-    public Booking(String passengerName, String code, String gender, String passport, double amount, String nationality) {
-        this.passengerName = passengerName;
-        this.code = code;
-        this.gender = gender;
-        this.passport = passport;
-        this.amount = amount;
-        this.nationality = nationality;
-
-    }
 
     // Getters and setters
 

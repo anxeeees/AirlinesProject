@@ -57,9 +57,16 @@ public class PassengerRepository {
     public void deletePassenger(String passengerId) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query q = session.createQuery("delete from Passenger  where passengerId =:passengerId");
-        q.setParameter("passengerId", passengerId);
-        q.executeUpdate();
+
+        Query updateBookingsQuery = session.createQuery("update Booking set passenger = null where passenger.passengerId = :passengerId");
+        updateBookingsQuery.setParameter("passengerId", passengerId);
+        updateBookingsQuery.executeUpdate();
+
+        Query deletePassengerQuery = session.createQuery("delete from Passenger where passengerId = :passengerId");
+        deletePassengerQuery.setParameter("passengerId", passengerId);
+        deletePassengerQuery.executeUpdate();
+
+        session.getTransaction().commit();
     }
 
     public void updatePassenger(String passengerId, String name, String nationality, String gender, String passport, String address, String phone) {

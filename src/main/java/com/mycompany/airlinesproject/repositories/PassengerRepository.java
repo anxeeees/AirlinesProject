@@ -55,18 +55,19 @@ public class PassengerRepository {
     }
 
     public void deletePassenger(String passengerId) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
 
-        Query updateBookingsQuery = session.createQuery("update Booking set passenger = null where passenger.passengerId = :passengerId");
-        updateBookingsQuery.setParameter("passengerId", passengerId);
-        updateBookingsQuery.executeUpdate();
+            Passenger passenger = session.get(Passenger.class, passengerId);
+            if (passenger == null) {
+                System.out.println("Passenger with ID " + passengerId + " not found.");
+                return;
+            }
 
-        Query deletePassengerQuery = session.createQuery("delete from Passenger where passengerId = :passengerId");
-        deletePassengerQuery.setParameter("passengerId", passengerId);
-        deletePassengerQuery.executeUpdate();
+            session.delete(passenger);
 
-        session.getTransaction().commit();
+            session.getTransaction().commit();
+        }
     }
 
     public void updatePassenger(String passengerId, String name, String nationality, String gender, String passport, String address, String phone) {
@@ -88,11 +89,7 @@ public class PassengerRepository {
 
     public Passenger getPassengerById(String id) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Query query = session.createQuery("from Passenger where passengerId = :passengerId");
-            query.setParameter("passengerId", id);
-            Passenger passenger = (Passenger) query.uniqueResult();
-            return passenger;
+            return session.get(Passenger.class, id);
         }
     }
 

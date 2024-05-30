@@ -40,7 +40,6 @@ public class FlightRepository {
         }
     }
     public void saveFlight(Flight flight) {
-
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.persist(flight);
@@ -60,18 +59,19 @@ public class FlightRepository {
     }
 
     public void deleteFlight(String flightId) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
 
-        Query updateBookingsQuery = session.createQuery("update Booking set flight = null where flight.flightId = :flightId");
-        updateBookingsQuery.setParameter("flightId", flightId);
-        updateBookingsQuery.executeUpdate();
+            Flight flight = session.get(Flight.class, flightId);
+            if (flight == null) {
+                System.out.println("Flight with ID " + flightId + " not found.");
+                return;
+            }
 
-        Query deleteFlightQuery = session.createQuery("delete from Flight where flightId = :flightId");
-        deleteFlightQuery.setParameter("flightId", flightId);
-        deleteFlightQuery.executeUpdate();
+            session.delete(flight);
 
-        session.getTransaction().commit();
+            session.getTransaction().commit();
+        } 
     }
 
     public void updateFlight(String code, String source, String destination, Date date, String seats){

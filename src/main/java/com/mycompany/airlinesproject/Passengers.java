@@ -8,7 +8,6 @@ package com.mycompany.airlinesproject;
 
 import com.mycompany.airlinesproject.entities.Passenger;
 import com.mycompany.airlinesproject.repositories.PassengerRepository;
-
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -17,16 +16,24 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 
-
 /**
+ * The Passengers class represents a JFrame for managing passengers in the Airlines Project application.
+ * It provides functionalities to display, add, update, and delete passengers using a JTable.
+ *
+ * <p>Usage:</p>
+ * <pre>{@code
+ * Passengers passengersForm = new Passengers();
+ * passengersForm.setVisible(true);
+ * }</pre>
  *
  * @author Ester
  */
 public class Passengers extends javax.swing.JFrame {
     private PassengerRepository passengerRepository;
+    private int key = 0; // Selected passenger key
 
     /**
-     * Creates new form Passenger2
+     * Creates new form Passengers.
      */
     public Passengers() {
         initComponents();
@@ -34,11 +41,14 @@ public class Passengers extends javax.swing.JFrame {
         displayPassengers();
     }
 
+    /**
+     * Display passengers in the JTable.
+     */
     private void displayPassengers() {
         List<Passenger> passengers = passengerRepository.getPassengers();
 
         Vector<String> tableHeaders = new Vector<String>();
-        Vector tableData = new Vector();
+        Vector<Vector<Object>> tableData = new Vector<Vector<Object>>();
         tableHeaders.add("PID");
         tableHeaders.add("Name");
         tableHeaders.add("Nationality");
@@ -47,24 +57,24 @@ public class Passengers extends javax.swing.JFrame {
         tableHeaders.add("Address");
         tableHeaders.add("Phone");
 
-        for(Passenger passenger : passengers) {
-
-            Vector<Object> oneRow = new Vector<Object>();
-            oneRow.add(passenger.getPassengerId());
-            oneRow.add(passenger.getName());
-            oneRow.add(passenger.getNationality());
-            oneRow.add(passenger.getGender());
-            oneRow.add(passenger.getPassport());
-            oneRow.add(passenger.getAddress());
-            oneRow.add(passenger.getPhone());
-            tableData.add(oneRow);
+        for (Passenger passenger : passengers) {
+            Vector<Object> rowData = new Vector<Object>();
+            rowData.add(passenger.getPassengerId());
+            rowData.add(passenger.getName());
+            rowData.add(passenger.getNationality());
+            rowData.add(passenger.getGender());
+            rowData.add(passenger.getPassport());
+            rowData.add(passenger.getAddress());
+            rowData.add(passenger.getPhone());
+            tableData.add(rowData);
         }
-        pass_table.setModel(new DefaultTableModel(tableData, tableHeaders));
-
-
+        DefaultTableModel model = new DefaultTableModel(tableData, tableHeaders);
+        pass_table.setModel(model);
     }
 
-
+    /**
+     * Clear input fields.
+     */
     private void clear() {
         pass_name.setText("");
         pass_pnum.setText("");
@@ -74,29 +84,32 @@ public class Passengers extends javax.swing.JFrame {
         pass_gender.setSelectedIndex(0);
     }
 
-
-    int key = 0;
+    /**
+     * Handle mouse click on passenger table to select a passenger.
+     */
     private void pass_tableMouseClicked(java.awt.event.MouseEvent evt) {
-        DefaultTableModel model = (DefaultTableModel)pass_table.getModel();
-        int myIndex = pass_table.getSelectedRow();
-        key = Integer.valueOf(model.getValueAt(myIndex,0).toString());
-        pass_name.setText(model.getValueAt(myIndex,1).toString());
-        pass_nat.setSelectedItem(model.getValueAt(myIndex,2).toString());
-        pass_gender.setSelectedItem(model.getValueAt(myIndex,3).toString());
-        pass_pnum.setText(model.getValueAt(myIndex,4).toString());
-        pass_address.setText(model.getValueAt(myIndex,5).toString());
-        pass_phone.setText(model.getValueAt(myIndex,6).toString());
+        DefaultTableModel model = (DefaultTableModel) pass_table.getModel();
+        int selectedRowIndex = pass_table.getSelectedRow();
+        key = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
+        pass_name.setText(model.getValueAt(selectedRowIndex, 1).toString());
+        pass_nat.setSelectedItem(model.getValueAt(selectedRowIndex, 2).toString());
+        pass_gender.setSelectedItem(model.getValueAt(selectedRowIndex, 3).toString());
+        pass_pnum.setText(model.getValueAt(selectedRowIndex, 4).toString());
+        pass_address.setText(model.getValueAt(selectedRowIndex, 5).toString());
+        pass_phone.setText(model.getValueAt(selectedRowIndex, 6).toString());
     }
 
-    private void pass_nameActionPerformed(java.awt.event.ActionEvent evt) {
-    }
-
+    /**
+     * Navigate back to the main form.
+     */
     private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new MainForm().setVisible(true);
         this.dispose();
-
     }
 
+    /**
+     * Delete selected passenger.
+     */
     private void del_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (key == 0) {
             JOptionPane.showMessageDialog(this, "Select a passenger");
@@ -108,28 +121,36 @@ public class Passengers extends javax.swing.JFrame {
         }
     }
 
-
+    /**
+     * Update selected passenger.
+     */
     private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (key == 0) {
             JOptionPane.showMessageDialog(this, "Select a passenger");
         } else if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
                 || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Missing information"); {
-            }
-        }else {
-            passengerRepository.updatePassenger(String.valueOf(key),pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(), pass_address.getText(),pass_phone.getText());
+            JOptionPane.showMessageDialog(this, "Missing information");
+        } else {
+            passengerRepository.updatePassenger(String.valueOf(key), pass_name.getText(),
+                    pass_nat.getSelectedItem().toString(), pass_gender.getSelectedItem().toString(),
+                    pass_pnum.getText(), pass_address.getText(), pass_phone.getText());
             JOptionPane.showMessageDialog(this, "Passenger updated");
             displayPassengers();
             clear();
         }
     }
 
+    /**
+     * Save new passenger.
+     */
     private void save_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (pass_name.getText().isEmpty() || pass_pnum.getText().isEmpty()
                 || pass_address.getText().isEmpty() || pass_phone.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            Passenger passenger = new Passenger(pass_name.getText(), pass_nat.getSelectedItem().toString(),pass_gender.getSelectedItem().toString(),pass_pnum.getText(),pass_address.getText(),pass_phone.getText());
+            Passenger passenger = new Passenger(pass_name.getText(), pass_nat.getSelectedItem().toString(),
+                    pass_gender.getSelectedItem().toString(), pass_pnum.getText(),
+                    pass_address.getText(), pass_phone.getText());
             passengerRepository.savePassenger(passenger);
             JOptionPane.showMessageDialog(this, "Passenger added");
             displayPassengers();
@@ -139,19 +160,22 @@ public class Passengers extends javax.swing.JFrame {
 
 
     /**
-     * @param args the command line arguments
+     * Main method to start the Passengers form.
+     *
+     * @param args The command line arguments.
      */
     public static void main(String args[]) {
-
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                     | UnsupportedLookAndFeelException ex) {
+                // Handle exception if look and feel cannot be set
             }
-            Passengers passenger = new Passengers();
-            passenger.setVisible(true);
+            new Passengers().setVisible(true);
         });
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -379,11 +403,6 @@ public class Passengers extends javax.swing.JFrame {
                         .addGap(0, 8, Short.MAX_VALUE)
         );
 
-        pass_name.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pass_nameActionPerformed(evt);
-            }
-        });
 
         pass_nat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {
                 "Afghan",

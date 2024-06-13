@@ -1,8 +1,3 @@
-
-/**
- *
- * @author Ester
- */
 package com.mycompany.airlinesproject;
 
 import java.awt.BasicStroke;
@@ -11,58 +6,89 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.BorderFactory;
-
 import javax.swing.JPasswordField;
 
-
-
+/**
+ * Customized password field with rounded border and customizable colors.
+ * Author: Ester
+ */
 public class PasswordField extends JPasswordField {
     private Color fillColor;
     private Color lineColor;
     private int strokeWidth;
 
-    // Updated constructor to set default values
+    /**
+     * Default constructor that sets default colors and border properties.
+     */
     public PasswordField() {
-        fillColor = new Color(255, 255, 255);
+        fillColor = new Color(255, 255, 255); // Default fill color
         lineColor = new Color(227, 227, 226); // Default line color
-        strokeWidth = 1;
-        setOpaque(false);
-        setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10));
+        strokeWidth = 1; // Default stroke width
+        setOpaque(false); // Make the field non-opaque
+        setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10)); // Add padding to the field
     }
 
-    // Additional constructor to set custom default line color
+    /**
+     * Constructor that allows setting a custom default line color.
+     * @param defaultLineColor The custom default line color
+     */
     public PasswordField(Color defaultLineColor) {
-        fillColor = new Color(255, 255, 255);
+        this(); // Invoke the default constructor to set other default values
         lineColor = defaultLineColor; // Set the custom default line color
-        strokeWidth = 1;
-        setOpaque(false);
-        setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10));
     }
 
+    /**
+     * Get the current fill color.
+     * @return The current fill color
+     */
     public Color getFillColor() {
         return fillColor;
     }
 
+    /**
+     * Set the fill color.
+     * @param fillColor The new fill color to set
+     */
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
+    /**
+     * Get the current line color.
+     * @return The current line color
+     */
     public Color getLineColor() {
         return lineColor;
     }
 
+    /**
+     * Set the line color.
+     * @param lineColor The new line color to set
+     */
     public void setLineColor(Color lineColor) {
         this.lineColor = lineColor;
     }
 
+    /**
+     * Get the current stroke width.
+     * @return The current stroke width
+     */
     public int getStrokeWidth() {
         return strokeWidth;
     }
 
+    /**
+     * Set the stroke width.
+     * @param strokeWidth The new stroke width to set
+     */
     public void setStrokeWidth(int strokeWidth) {
         this.strokeWidth = strokeWidth;
     }
 
+    /**
+     * Override the paintComponent method to customize the appearance.
+     * This method paints the rounded rectangle with specified colors.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         if (!isOpaque()) {

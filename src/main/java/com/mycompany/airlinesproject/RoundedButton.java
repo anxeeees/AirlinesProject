@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.airlinesproject;
 
 import java.awt.BasicStroke;
@@ -13,6 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 
+/**
+ * Customized JButton with rounded corners and customizable colors for different states.
+ * Author: Ester
+ */
 public class RoundedButton extends JButton {
 
     private boolean over;
@@ -27,7 +27,9 @@ public class RoundedButton extends JButton {
 
     private int strokeWidth = 2;
 
-
+    /**
+     * Default constructor to initialize the button with default colors and behaviors.
+     */
     public RoundedButton() {
         fillOriginal = new Color(0, 0, 0);
         fillOver = new Color(72, 172, 239);
@@ -81,50 +83,110 @@ public class RoundedButton extends JButton {
         });
     }
 
+    /**
+     * Get the original fill color of the button.
+     *
+     * @return The original fill color.
+     */
     public Color getFillOriginal() {
         return fillOriginal;
     }
 
+    /**
+     * Set the original fill color of the button.
+     *
+     * @param fillOriginal The original fill color to set.
+     */
     public void setFillOriginal(Color fillOriginal) {
         this.fillOriginal = fillOriginal;
     }
 
+    /**
+     * Get the fill color when the mouse is over the button.
+     *
+     * @return The fill color for mouse over state.
+     */
     public Color getFillOver() {
         return fillOver;
     }
 
+    /**
+     * Set the fill color when the mouse is over the button.
+     *
+     * @param fillOver The fill color for mouse over state to set.
+     */
     public void setFillOver(Color fillOver) {
         this.fillOver = fillOver;
     }
 
+    /**
+     * Get the fill color when the button is clicked.
+     *
+     * @return The fill color for click state.
+     */
     public Color getFillClick() {
         return fillClick;
     }
 
+    /**
+     * Set the fill color when the button is clicked.
+     *
+     * @param fillClick The fill color for click state to set.
+     */
     public void setFillClick(Color fillClick) {
         this.fillClick = fillClick;
     }
 
+    /**
+     * Get the original line color of the button.
+     *
+     * @return The original line color.
+     */
     public Color getLineOriginal() {
         return lineOriginal;
     }
 
+    /**
+     * Set the original line color of the button.
+     *
+     * @param lineOriginal The original line color to set.
+     */
     public void setLineOriginal(Color lineOriginal) {
         this.lineOriginal = lineOriginal;
     }
 
+    /**
+     * Get the line color when the mouse is over the button.
+     *
+     * @return The line color for mouse over state.
+     */
     public Color getLineOver() {
         return lineOver;
     }
 
+    /**
+     * Set the line color when the mouse is over the button.
+     *
+     * @param lineOver The line color for mouse over state to set.
+     */
     public void setLineOver(Color lineOver) {
         this.lineOver = lineOver;
     }
 
+    /**
+     * Get the stroke width of the button border.
+     *
+     * @return The stroke width in pixels.
+     */
     public int getStrokeWidth() {
         return strokeWidth;
     }
 
+    /**
+     * Set the stroke width of the button border.
+     *
+     * @param strokeWidth The stroke width in pixels to set.
+     */
     public void setStrokeWidth(int strokeWidth) {
         this.strokeWidth = strokeWidth;
     }
@@ -132,7 +194,7 @@ public class RoundedButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         if (!isOpaque()) {
-            Graphics2D g2d = (Graphics2D) g;
+            Graphics2D g2d = (Graphics2D) g.create();
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             int s = strokeWidth;
             int w = getWidth() - (2 * s);
@@ -143,6 +205,7 @@ public class RoundedButton extends JButton {
             g2d.setStroke(new BasicStroke(s));
             g2d.setColor(line);
             g2d.drawRoundRect(s, s, w, h, h, h);
+            g2d.dispose();
         }
         super.paintComponent(g);
     }

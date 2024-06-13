@@ -21,7 +21,9 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * @author Ester
+ * This class represents the ticket booking form in the airlines project GUI.
+ * It allows users to book flights by selecting a passenger, flight, and entering booking details.
+ * Author: Ester
  */
 public class TicketBooking extends javax.swing.JFrame {
 
@@ -31,7 +33,8 @@ public class TicketBooking extends javax.swing.JFrame {
     private FlightRepository flightRepository;
 
     /**
-     * Creates new form Passenger2
+     * Creates new form TicketBooking.
+     * Initializes the components and sets up repositories.
      */
     public TicketBooking() {
         initComponents();
@@ -48,6 +51,9 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
+    /**
+     * Populates the flight code drop-down menu with available flight codes.
+     */
     private void getFlight() {
         List<Flight> flights = flightRepository.getFlights();
         for (Flight flight : flights) {
@@ -56,7 +62,12 @@ public class TicketBooking extends javax.swing.JFrame {
         }
     }
 
-
+    /**
+     * Handle mouse click event on the back button.
+     * Opens the main form (MainForm) and disposes of the current window.
+     *
+     * @param evt The MouseEvent triggered by the user's mouse actions.
+     */
 
     private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new MainForm().setVisible(true);
@@ -64,11 +75,21 @@ public class TicketBooking extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Handle mouse click event on the reset button.
+     * Clears all input fields.
+     *
+     * @param evt The MouseEvent triggered by the user's mouse actions.
+     */
+
     private void reset_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         clear();
     }
 
 
+    /**
+     * Retrieves passenger information and populates the passenger details fields.
+     */
     private void getPassenger() {
         List<Passenger> passengers = passengerRepository.getPassengers();
         for (Passenger passenger : passengers) {
@@ -81,6 +102,10 @@ public class TicketBooking extends javax.swing.JFrame {
         }
         tb_pass_id.setSelectedIndex(0);
     }
+    /**
+     * Retrieves passenger information based on the selected ID and updates the details fields.
+     * @param id The ID of the passenger to retrieve and display.
+     */
     private void getPassengerById(Long id) {
         List<Passenger> passengers = passengerRepository.getPassengers();
         for (Passenger passenger : passengers) {
@@ -95,7 +120,9 @@ public class TicketBooking extends javax.swing.JFrame {
         }
     }
 
-
+    /**
+     * Displays existing bookings in the booking table.
+     */
     private void displayBooking() {
         List<Booking> bookings = bookingRepository.getBookings();
 
@@ -125,6 +152,9 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
+    /**
+     * Clears all input fields and resets the form.
+     */
     private void clear() {
         tb_flight_code.setSelectedIndex(-1);
         tb_name.setText("");
@@ -134,6 +164,10 @@ public class TicketBooking extends javax.swing.JFrame {
         tb_amount.setText("");
     }
 
+    /**
+     * Handles the event when the book button is clicked to make a new booking.
+     * Validates input and saves the booking if all required fields are filled.
+     */
 
     private void book_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (tb_pass_id.getSelectedIndex() == -1 || tb_flight_code.getSelectedIndex() == -1 || tb_amount.getText().isEmpty()) {
@@ -164,13 +198,20 @@ public class TicketBooking extends javax.swing.JFrame {
     }
 
 
-
+    /**
+     * Handles the event when the passenger ID drop-down selection changes.
+     * Retrieves the selected passenger's details and updates the form fields.
+     */
         private void tb_pass_idActionPerformed(java.awt.event.ActionEvent evt) {
         Long id = Long.parseLong ((String) tb_pass_id.getSelectedItem());
         getPassengerById(id);
     }
 
 
+    /**
+     * Initializes the application's main frame and sets the look and feel.
+     * @param args The command line arguments (not used).
+     */
 
 
     public static void main(String args[]) {

@@ -62,7 +62,7 @@ public class Passenger {
      * Phone number of the passenger.
      */
     @Column(name = "phone")
-    private String phone;
+    private int phone;
 
     /**
      * List of bookings associated with this passenger.
@@ -87,7 +87,7 @@ public class Passenger {
      * @param address The address of the passenger.
      * @param phone The phone number of the passenger.
      */
-    public Passenger(String name, String nationality, String gender, String passport, String address, String phone) {
+    public Passenger(String name, String nationality, String gender, String passport, String address, int phone) {
         this.name = name;
         this.nationality = nationality;
         this.gender = gender;
@@ -221,7 +221,7 @@ public class Passenger {
      *
      * @return the passenger phone number.
      */
-    public String getPhone() {
+    public int getPhone() {
         return phone;
     }
 
@@ -230,7 +230,7 @@ public class Passenger {
      *
      * @param phone the passenger phone number.
      */
-    public void setPhone(String phone) {
+    public void setPhone(int phone) {
         this.phone = phone;
     }
 

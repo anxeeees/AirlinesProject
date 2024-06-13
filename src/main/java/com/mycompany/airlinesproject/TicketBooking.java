@@ -135,7 +135,6 @@ public class TicketBooking extends javax.swing.JFrame {
         tableHeaders.add("Passport");
         tableHeaders.add("Amount");
         tableHeaders.add("Nationality");
-        tableHeaders.add("FlightID");
 
         for (Booking booking : bookings) {
             Vector<Object> oneRow = new Vector<Object>();

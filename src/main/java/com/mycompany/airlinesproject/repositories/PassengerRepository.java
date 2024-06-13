@@ -142,7 +142,7 @@ public class PassengerRepository {
         passenger.setGender(gender);
         passenger.setPassport(passport);
         passenger.setAddress(address);
-        passenger.setPhone(phone);
+        passenger.setPhone(Integer.parseInt(phone));
         session.persist(passenger);
         session.getTransaction().commit();
         session.close();

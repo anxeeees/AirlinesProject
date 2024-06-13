@@ -125,23 +125,23 @@ public class FlightRepository {
     /**
      * Updates a flight's details in the database.
      *
-     * @param code The code of the flight to be updated.
+     * @param flightId The id of the flight to be updated.
      * @param source The new source of the flight.
      * @param destination The new destination of the flight.
      * @param date The new date of the flight.
      * @param seats The new number of seats of the flight.
      */
-    public void updateFlight(String code, String source, String destination, Date date, String seats) {
+    public void updateFlight(Long flightId, String source, String destination, Date date, String seats) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query<Flight> query = session.createQuery("from Flight where code =:code", Flight.class);
-        query.setParameter("code", code);
+        Query<Flight> query = session.createQuery("from Flight where flightId = :flightId", Flight.class);
+        query.setParameter("flightId", flightId);
         Flight flight = query.getSingleResult();
         flight.setSource(source);
         flight.setDestination(destination);
         flight.setDate(date);
         flight.setSeats(Integer.parseInt(seats));
-        session.persist(flight);
+        session.update(flight); // Use update instead of persist for existing entities
         session.getTransaction().commit();
         session.close();
     }

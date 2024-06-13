@@ -1,3 +1,4 @@
+
 package com.mycompany.airlinesproject;
 
 import com.mycompany.airlinesproject.entities.Flight;
@@ -10,38 +11,21 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
+
+
 /**
- * The Flights class represents a JFrame that allows users to manage flight information.
- * It provides functionality to add, update, delete, and display flights.
- *
- * <p>
- * This class interacts with the FlightRepository to perform CRUD operations on Flight entities.
- * </p>
- *
- * <p>
- * Usage example:
- * </p>
- * <pre>
- * {@code
- * Flights flights = new Flights();
- * flights.setVisible(true);
- * }
- * </pre>
- *
- * @see Flight
- * @see FlightRepository
- * @see DefaultTableModel
- *
- * @author Ester
+ * GUI class for managing flights information.
+ * Provides functionality for displaying, editing, deleting, and saving flight details.
+ * Author: Ester
  */
 public class Flights extends javax.swing.JFrame {
 
+
+
     private FlightRepository flightRepository;
-    private String key = "";
 
     /**
-     * Creates new form Flights and initializes the components.
-     * Also sets up the FlightRepository and displays the current flights.
+     * Creates new form Flights
      */
     public Flights() {
         initComponents();
@@ -50,22 +34,26 @@ public class Flights extends javax.swing.JFrame {
     }
 
     /**
-     * Event handler for the back button. Closes the current form and opens the MainForm.
+     * Handles mouse click event on the back button.
+     * Navigates back to the main form and disposes the current frame.
      *
-     * @param evt The mouse event.
+     * @param evt The MouseEvent triggered by the user's mouse actions.
      */
+
     private void back_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         new MainForm().setVisible(true);
         this.dispose();
     }
 
     /**
-     * Event handler for the delete button. Deletes the selected flight from the database.
+     * Handles mouse click event on the delete button.
+     * Deletes the selected flight from the repository and updates the UI.
+     * Displays an error message if no flight is selected.
      *
-     * @param evt The mouse event.
+     * @param evt The MouseEvent triggered by the user's mouse actions.
      */
     private void delete_buttonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (key.equals("0")) {
+        if (key == "0") {
             JOptionPane.showMessageDialog(this, "Select a flight");
         } else {
             flightRepository.deleteFlight(key);
@@ -76,32 +64,51 @@ public class Flights extends javax.swing.JFrame {
     }
 
     /**
-     * Event handler for the edit button. Updates the selected flight with new information.
+     * Handle mouse click event on the edit button.
+     * Validates input fields and updates the selected flight's information.
+     * Displays error message if any required information is missing or if the flight code is incorrect.
      *
-     * @param evt The mouse event.
+     * @param evt The MouseEvent triggered by the user's mouse actions.
      */
     private void edit_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (flight_code.getText().isEmpty() || flight_nos.getText().isEmpty()
                 || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1 || flight_tof.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Missing information");
-        } else if (!Objects.equals(flight_code.getText(), key)) {
-            JOptionPane.showMessageDialog(this, "Incorrect flight");
         } else {
-            flightRepository.updateFlight(flight_code.getText(), flight_source.getSelectedItem().toString(), flight_destination.getSelectedItem().toString(), flight_tof.getDate(), flight_nos.getText());
-            JOptionPane.showMessageDialog(this, "Flight updated");
-            displayFlight();
-            clear();
+            try {
+                int seats = Integer.parseInt(flight_nos.getText());
+
+                // Check if flight code matches key
+                if (!flight_code.getText().equals(key)) {
+                    JOptionPane.showMessageDialog(this, "Selected flight does not match the entered flight code. Please select the correct flight.");
+                } else {
+                    // Update flight information in the repository
+                    flightRepository.updateFlight(Long.valueOf(flight_code.getText()),
+                            flight_source.getSelectedItem().toString(),
+                            flight_destination.getSelectedItem().toString(),
+                            flight_tof.getDate(),
+                            String.valueOf(seats));
+
+                    JOptionPane.showMessageDialog(this, "Flight updated");
+                    displayFlight();
+                    clear();
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Incorrect format for seats number. Please enter a valid integer.");
+            }
         }
     }
 
     /**
-     * Displays the flights in the JTable.
+     * Displays flights information in the table.
+     * Retrieves flights from the repository and populates the table with flight details.
      */
+
     private void displayFlight() {
         List<Flight> flights = flightRepository.getFlights();
 
-        Vector<String> tableHeaders = new Vector<>();
-        Vector<Vector<Object>> tableData = new Vector<>();
+        Vector<String> tableHeaders = new Vector<String>();
+        Vector tableData = new Vector();
         tableHeaders.add("FlightID");
         tableHeaders.add("Code");
         tableHeaders.add("Source");
@@ -110,7 +117,8 @@ public class Flights extends javax.swing.JFrame {
         tableHeaders.add("Seats");
 
         for (Flight flight : flights) {
-            Vector<Object> oneRow = new Vector<>();
+
+            Vector<Object> oneRow = new Vector<Object>();
             oneRow.add(flight.getFlightId());
             oneRow.add(flight.getCode());
             oneRow.add(flight.getSource());
@@ -122,54 +130,64 @@ public class Flights extends javax.swing.JFrame {
         flight_table.setModel(new DefaultTableModel(tableData, tableHeaders));
     }
 
-    /**
-     * Clears the input fields in the form.
-     */
     private void clear() {
         flight_code.setText("");
         flight_nos.setText("");
         flight_source.setSelectedIndex(0);
         flight_destination.setSelectedIndex(0);
+        flight_nos.setText("");
         flight_tof.setDate(null);
     }
 
     /**
-     * Event handler for the save button. Saves a new flight to the database.
+     * Handle mouse click event on the save button.
+     * Validates input fields and saves a new flight with the provided information.
+     * Displays error message if any required information is missing or if the seats number format is incorrect.
      *
-     * @param evt The mouse event.
+     * @param evt The MouseEvent triggered by the user's mouse actions.
      */
     private void save_buttonMouseClicked(java.awt.event.MouseEvent evt) {
         if (flight_code.getText().isEmpty() || flight_nos.getText().isEmpty()
                 || flight_source.getSelectedIndex() == -1 || flight_destination.getSelectedIndex() == -1 || flight_tof.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
-            Flight flight = new Flight(flight_code.getText(), flight_source.getSelectedItem().toString(), flight_destination.getSelectedItem().toString(), flight_tof.getDate(), Integer.valueOf(flight_nos.getText()));
-            flightRepository.saveFlight(flight);
-            JOptionPane.showMessageDialog(this, "Flight added");
-            displayFlight();
-            clear();
+            try {
+                int seats = Integer.parseInt(flight_nos.getText());
+                Flight flight = new Flight(flight_code.getText(),
+                        flight_source.getSelectedItem().toString(),
+                        flight_destination.getSelectedItem().toString(),
+                        flight_tof.getDate(),
+                        seats);
+                flightRepository.saveFlight(flight);
+                JOptionPane.showMessageDialog(this, "Flight added");
+                displayFlight();
+                clear();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Incorrect format for seats number. Please enter a valid integer.");
+            }
         }
     }
 
     /**
-     * Event handler for mouse clicks on the flight table. Populates the input fields with the selected flight's data.
+     * Handles mouse click event on the flight table.
+     * Retrieves the selected flight details and populates the form fields for editing.
      *
-     * @param evt The mouse event.
+     * @param evt The MouseEvent triggered by the user's mouse actions.
      */
+    String key = "";
+
     private void flight_tableMouseClicked(java.awt.event.MouseEvent evt) {
         DefaultTableModel model = (DefaultTableModel) flight_table.getModel();
         int myIndex = flight_table.getSelectedRow();
-        key = model.getValueAt(myIndex, 0).toString();
-        flight_code.setText(model.getValueAt(myIndex, 0).toString());
-        flight_source.setSelectedItem(model.getValueAt(myIndex, 1).toString());
-        flight_destination.setSelectedItem(model.getValueAt(myIndex, 2).toString());
-        flight_tof.setDate((Date) model.getValueAt(myIndex, 3));
-        flight_nos.setText(model.getValueAt(myIndex, 4).toString());
+        key = model.getValueAt(myIndex,0).toString();
+        flight_code.setText(model.getValueAt(myIndex,0).toString());
+        flight_source.setSelectedItem(model.getValueAt(myIndex, 2).toString());
+        flight_destination.setSelectedItem(model.getValueAt(myIndex, 3).toString());
+        flight_tof.setDate((Date) model.getValueAt(myIndex,4));
+        flight_nos.setText(model.getValueAt(myIndex, 5).toString());
     }
 
     /**
-     * The main method to run the Flights form.
-     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -178,17 +196,15 @@ public class Flights extends javax.swing.JFrame {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
                      UnsupportedLookAndFeelException ex) {
-                ex.printStackTrace();
+
             }
             Flights flights = new Flights();
             flights.setVisible(true);
         });
     }
 
-    /**
-     * Initializes the components. This method is generated by the Form Editor.
-     * It sets up the UI elements and their properties.
-     */
+
+
 
     public void initComponents() {
         jPanel1 = new javax.swing.JPanel();

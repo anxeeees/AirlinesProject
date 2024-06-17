@@ -13,7 +13,7 @@ import javax.swing.*;
  * <p>Usage:</p>
  * <pre>{@code
  * Login login = new Login();
- * login.setVisible(true);
+ *  * login.setVisible(true);
  * }</pre>
  *
  * @author Ester

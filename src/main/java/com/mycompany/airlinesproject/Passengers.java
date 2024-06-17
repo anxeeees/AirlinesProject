@@ -10,6 +10,7 @@ import com.mycompany.airlinesproject.repositories.PassengerRepository;
 
 import java.util.List;
 import java.util.Vector;
+import javax.persistence.NoResultException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -114,10 +115,21 @@ public class Passengers extends javax.swing.JFrame {
         if (key == 0) {
             JOptionPane.showMessageDialog(this, "Select a passenger");
         } else {
-            passengerRepository.deletePassenger(String.valueOf(key));
-            JOptionPane.showMessageDialog(this, "Passenger deleted");
-            displayPassengers();
-            clear();
+            try {
+                Passenger passenger = passengerRepository.getPassengerById(String.valueOf(key));
+                if (passenger == null) {
+                    JOptionPane.showMessageDialog(this, "There is no data of this entity");
+                    displayPassengers();
+                } else {
+                    passengerRepository.deletePassenger(String.valueOf(key));
+                    JOptionPane.showMessageDialog(this, "Passenger deleted");
+                    displayPassengers();
+                    clear();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "An error occurred while deleting the passenger");
+                e.printStackTrace();
+            }
         }
     }
 
@@ -136,22 +148,23 @@ public class Passengers extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Missing information");
         } else {
             try {
-                // Parse phone number as an integer
-                int phoneNumber = Integer.parseInt(pass_phone.getText());
-
-                // Update passenger information in the repository
-                passengerRepository.updatePassenger(String.valueOf(key),
-                        pass_name.getText(),
-                        pass_nat.getSelectedItem().toString(),
-                        pass_gender.getSelectedItem().toString(),
-                        pass_pnum.getText(),
-                        pass_address.getText(),
-                        String.valueOf(phoneNumber)); // Use parsed integer for phone number
-
-                // Display success message and update table
-                JOptionPane.showMessageDialog(this, "Passenger updated");
-                displayPassengers();
-                clear();
+                Passenger passenger = passengerRepository.getPassengerById(String.valueOf(key));
+                if (passenger == null) {
+                    JOptionPane.showMessageDialog(this, "Passenger not found");
+                    displayPassengers();
+                } else {
+                    int phoneNumber = Integer.parseInt(pass_phone.getText());
+                    passengerRepository.updatePassenger(String.valueOf(key),
+                            pass_name.getText(),
+                            pass_nat.getSelectedItem().toString(),
+                            pass_gender.getSelectedItem().toString(),
+                            pass_pnum.getText(),
+                            pass_address.getText(),
+                            String.valueOf(phoneNumber));
+                    JOptionPane.showMessageDialog(this, "Passenger updated");
+                    displayPassengers();
+                    clear();
+                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid phone number format. Please enter a valid number.");
             }
